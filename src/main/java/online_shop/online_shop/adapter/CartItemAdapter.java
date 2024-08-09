@@ -8,28 +8,30 @@ import online_shop.online_shop.dto.ProductDto;
 import java.util.ArrayList;
 import java.util.List;
 
-import static online_shop.online_shop.adapter.CartAdapter.getCartDtofromCart;
-import static online_shop.online_shop.adapter.CartAdapter.getCartFromCartDto;
-import static online_shop.online_shop.adapter.ProductAdapter.getProductDtoFromProduct;
-import static online_shop.online_shop.adapter.ProductAdapter.getProductFromProductDto;
+
 
 public class CartItemAdapter {
     public static CartItem getCartItemFromCartItemDto(CartItemDto cartItemDto) {
+        if (cartItemDto == null || cartItemDto.getProductDto() == null) {
+            throw new IllegalArgumentException("CartItemDto and ProductDto cannot be null");
+        }
         CartItem cartItem = new CartItem();
-        cartItem.setCart(getCartFromCartDto(cartItemDto.getCartDto()));
-        cartItem.setProduct(getProductFromProductDto(cartItemDto.getProductDto()));
-        cartItem.setPrice(cartItemDto.getPrice());
         cartItem.setQuantity(cartItemDto.getQuantity());
+        cartItem.setPrice(cartItemDto.getPrice());
+        cartItem.setProduct(ProductAdapter.getProductFromProductDto(cartItemDto.getProductDto()));
         return cartItem;
     }
 
     public static CartItemDto getCartItemDtoFromCartItem(CartItem cartItem) {
+       if (cartItem == null || cartItem.getProduct() == null) {
+            throw new IllegalArgumentException("CartItem and Product cannot be null");
+        }
         CartItemDto cartItemDto = new CartItemDto();
-        cartItemDto.setCartDto(getCartDtofromCart(cartItem.getCart()));
-        cartItemDto.setProductDto(getProductDtoFromProduct(cartItem.getProduct()));
-        cartItemDto.setPrice(cartItem.getPrice());
+        cartItemDto.setProductDto(ProductAdapter.getProductDtoFromProduct(cartItem.getProduct()));
         cartItemDto.setQuantity(cartItem.getQuantity());
+        cartItemDto.setPrice(cartItem.getPrice());
         return cartItemDto;
+
     }
 
     public static List<CartItem> getCartItemListFromCartItemDtoList(List<CartItemDto> cartItemDtoList ){

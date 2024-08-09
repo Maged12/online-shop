@@ -1,7 +1,9 @@
 package online_shop.online_shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,8 +14,9 @@ public class Category {
     private Long id;
     private String name;
     private String description;
-    @OneToMany
-    private List<Product> products;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Product> products = new ArrayList<Product>();
 
     public Category() {}
     public Category(String name, String description) {

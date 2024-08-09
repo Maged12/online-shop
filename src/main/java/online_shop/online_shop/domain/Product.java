@@ -1,5 +1,6 @@
 package online_shop.online_shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,18 +12,17 @@ public class Product {
     private String name;
     private String description;
     private double price;
-    private int quantity;
     @ManyToOne
+    @JsonBackReference
     private Category category;
     @Lob
     private byte[] image;
 
     public Product() {}
-    public Product(String name, String description, double price, int quantity, Category category, byte[] image) {
+    public Product(String name, String description, double price, Category category, byte[] image) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.quantity = quantity;
         this.category = category;
         this.image = image;
     }
@@ -56,14 +56,6 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public Category getCategory() {

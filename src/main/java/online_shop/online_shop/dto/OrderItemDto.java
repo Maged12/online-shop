@@ -1,8 +1,5 @@
 package online_shop.online_shop.dto;
 
-import online_shop.online_shop.domain.Order;
-import online_shop.online_shop.domain.Product;
-
 public class OrderItemDto {
     private int quantity;
     private double price;

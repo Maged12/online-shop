@@ -19,8 +19,8 @@ public class Order {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderItem> items = new ArrayList<OrderItem>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
 
     public Order() {
@@ -34,7 +34,7 @@ public class Order {
     }
 
     public void addItem(OrderItem item) {
-        this.items.add(item);
+        this.orderItems.add(item);
     }
 
     public void setId(Long id) {
@@ -77,12 +77,12 @@ public class Order {
         this.user = user;
     }
 
-    public List<OrderItem> getItems() {
-        return items;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
+    public void setOrderItems(List<OrderItem> items) {
+        this.orderItems = items;
     }
 }
 

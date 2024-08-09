@@ -6,16 +6,14 @@ public class ProductDto {
     private String name;
     private String description;
     private double price;
-    private int quantity;
     private CategoryDto categoryDto;
     private byte[] image;
 
     public ProductDto() {}
-    public ProductDto(String name, String description, double price, int quantity, CategoryDto categoryDto, byte[] image) {
+    public ProductDto(String name, String description, double price, CategoryDto categoryDto, byte[] image) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.quantity = quantity;
         this.categoryDto = categoryDto;
         this.image = image;
     }
@@ -42,14 +40,6 @@ public class ProductDto {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public CategoryDto getCategoryDto() {

@@ -1,8 +1,5 @@
 package online_shop.online_shop.dto;
 
-import online_shop.online_shop.domain.OrderItem;
-import online_shop.online_shop.domain.User;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +9,7 @@ public class OrderDto {
     private String status;
     private double totalAmount;
     private UserDto userDto;
-    private List<OrderItemDto> itemDtos = new ArrayList<OrderItemDto>();
+    private List<OrderItemDto> orderItemDtos = new ArrayList<OrderItemDto>();
 
     public OrderDto() {}
 
@@ -24,7 +21,7 @@ public class OrderDto {
     }
 
     public void addItemDto(OrderItemDto orderItemDto) {
-        itemDtos.add(orderItemDto);
+        orderItemDtos.add(orderItemDto);
     }
 
     public String getStatus() {
@@ -59,11 +56,11 @@ public class OrderDto {
         this.userDto = userDto;
     }
 
-    public List<OrderItemDto> getItemDtos() {
-        return itemDtos;
+    public List<OrderItemDto> getOrderItemDtos() {
+        return orderItemDtos;
     }
 
-    public void setItemDtos(List<OrderItemDto> itemDtos) {
-        this.itemDtos = itemDtos;
+    public void setOrderItemDtos(List<OrderItemDto> orderItemDtos) {
+        this.orderItemDtos = orderItemDtos;
     }
 }

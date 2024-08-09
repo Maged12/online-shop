@@ -6,33 +6,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartDto {
-    private User user;
-    private List<CartItemDto> cartItems;
+    private UserDto userDto;
+    private List<CartItemDto> items = new ArrayList<CartItemDto>();
     private double totalPrice;
 
     public CartDto() {}
-    public CartDto(User user, double totalPrice) {
-        this.user = user;
-        this.cartItems = new ArrayList<>();
-    }
-    public void addCartItem(CartItemDto cartItemDto){
-        this.cartItems.add(cartItemDto);
+    public CartDto(UserDto userDto, double totalPrice) {
+        this.userDto = userDto;
+        this.totalPrice = totalPrice;
     }
 
-    public List<CartItemDto> getCartItems() {
-        return cartItems;
+    public void addItem(CartItemDto item) {
+        items.add(item);
+    }
+    public List<CartItemDto> getItems() {
+        return items;
     }
 
-    public void setCartItems(List<CartItemDto> cartItems) {
-        this.cartItems = cartItems;
+    public void setItems(List<CartItemDto> items) {
+        this.items = items;
     }
 
-    public User getUser() {
-        return user;
+    public UserDto getUserDto() {
+        return userDto;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
     }
 
     public double getTotalPrice() {

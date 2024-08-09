@@ -1,5 +1,7 @@
 package online_shop.online_shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,7 +17,8 @@ public class Cart {
     @OneToOne
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<CartItem> items = new ArrayList<CartItem>();
 
     private double totalPrice;

@@ -1,5 +1,6 @@
 package online_shop.online_shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -63,6 +64,6 @@ public class CartItem {
     }
 
     public void setPrice(double price) {
-        this.price = this.price;
+        this.price = price;
     }
 }
