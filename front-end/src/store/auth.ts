@@ -6,16 +6,20 @@ import {
 } from "../helpers/checkExpiration";
 
 interface User {
+  id: number;
+  name: string;
+  email: string;
   expirationDate?: Date;
-  [key: string]: any;
 }
 
 interface State {
   user: User | null;
+  jwtToken: string | null;
 }
 
 const initialState: State = {
-  user: getUserFromLocalStorage() || null,
+  user: getUserFromLocalStorage()?.user || null,
+  jwtToken: getUserFromLocalStorage()?.jwtToken || null,
 };
 
 const actions = Object.freeze({
@@ -24,15 +28,15 @@ const actions = Object.freeze({
 });
 
 type Action =
-  | { type: typeof actions.SET_USER; user: User; }
+  | { type: typeof actions.SET_USER; user: User; jwtToken: string; }
   | { type: typeof actions.LOGOUT; };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case actions.SET_USER:
-      return { ...state, user: action.user };
+      return { ...state, user: action.user, jwtToken: action.jwtToken };
     case actions.LOGOUT:
-      return { ...state, user: null };
+      return { ...state, user: null, jwtToken: null };
     default:
       return state;
   }
@@ -53,14 +57,13 @@ const useAuth = () => {
         body: JSON.stringify(userInfo),
       });
 
-      const user = await response.json();
-      if (user.error) {
-        toast.error(user.error);
-      }
-      if (user.user) {
-        dispatch({ type: actions.SET_USER, user: user.user });
-        user.user.expirationDate = setExpirationDate(7);
-        localStorage.setItem("user", JSON.stringify(user.user));
+      const data = await response.json();
+      if (data.error) {
+        toast.error(data.error);
+      } else if (data.user) {
+        data.user.expirationDate = setExpirationDate(7);
+        localStorage.setItem("user", JSON.stringify({ user: data.user, jwtToken: data.jwtToken }));
+        dispatch({ type: actions.SET_USER, user: data.user, jwtToken: data.jwtToken });
         toast.success("Registration successful");
         // login user
       }
@@ -69,9 +72,9 @@ const useAuth = () => {
     }
   };
 
-  const login = async (userInfo: User) => {
+  const login = async (userInfo: { email: string; password: string; }) => {
     try {
-      const response = await fetch(`url/login`, {
+      const response = await fetch(`http://localhost:8080/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,14 +83,14 @@ const useAuth = () => {
         credentials: "include",
         body: JSON.stringify(userInfo),
       });
-      const user = await response.json();
-      if (user.error) {
-        toast.error(user.error);
-      }
-      if (user.user) {
-        dispatch({ type: actions.SET_USER, user: user.user });
-        user.user.expirationDate = setExpirationDate(7);
-        localStorage.setItem("user", JSON.stringify(user.user));
+
+      const data = await response.json();
+      if (data.error) {
+        toast.error(data.error);
+      } else if (data.user) {
+        data.user.expirationDate = setExpirationDate(7);
+        localStorage.setItem("user", JSON.stringify({ user: data.user, jwtToken: data.jwtToken }));
+        dispatch({ type: actions.SET_USER, user: data.user, jwtToken: data.jwtToken });
         toast.success("Login successful");
       }
     } catch (error) {

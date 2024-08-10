@@ -25,7 +25,7 @@ const Account = () => {
             <span className="account-user">Guest</span>
           ) : (
             <span className="account-user">
-              {auth.state.user.username}
+              {auth.state.user.name}
             </span>
           )}
           <span className="account-details">

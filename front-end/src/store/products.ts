@@ -157,7 +157,20 @@ const useStore = () => {
 
   async function handleData() {
     try {
-      const modifiedData = data.map((product) => ({
+      const response = await fetch('http://localhost:8080/api/products');
+      const apiData = await response.json();
+
+      const transformedData: Product[] = apiData.map((item: any, index: number) => ({
+        _id: (index + 1).toString(), // Generate a simple ID based on index
+        name: item.name,
+        description: item.description,
+        rating: 5, // Assuming a default rating of 5
+        price: item.price,
+        times_bought: 0, // Assuming no times bought initially
+        __v: 0, // Assuming no versioning initially
+        product_image: item.image || 'default_image_url.jpg', // Provide a default image if none
+      }));
+      const modifiedData = transformedData.map((product) => ({
         ...product,
         addedToCart: false,
       }));
