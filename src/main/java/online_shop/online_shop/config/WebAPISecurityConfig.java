@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import online_shop.online_shop.filter.JWTAuthFilter;
 import online_shop.online_shop.util.ShopUserDetailsService;
@@ -21,13 +23,13 @@ import online_shop.online_shop.util.ShopUserDetailsService;
 @EnableWebSecurity
 public class WebAPISecurityConfig {
 
-    private ShopUserDetailsService cityLibraryUserDetailsService;
+    private ShopUserDetailsService shopUserDetailsService;
 
     private JWTAuthFilter jwtAuthFilter;
 
     public WebAPISecurityConfig(ShopUserDetailsService cityLibraryUserDetailsService,
             JWTAuthFilter jwtAuthFilter) {
-        this.cityLibraryUserDetailsService = cityLibraryUserDetailsService;
+        this.shopUserDetailsService = cityLibraryUserDetailsService;
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
@@ -39,23 +41,29 @@ public class WebAPISecurityConfig {
                 .authorizeHttpRequests(
                         auth -> {
                             auth
-                                    .requestMatchers("/**").permitAll();
-                            // .requestMatchers("/citylibrary/api/v1/public/auth/**").permitAll()
-                            // .requestMatchers("/citylibrary/api/v1/publisher/**").authenticated()
-                            // .requestMatchers("/citylibrary/api/v1/publisher/new").hasAuthority("ADMIN");
-                            // .requestMatchers("/citylibrary/api/v1/publisher/new").hasRole("ADMIN");
-                            // .requestMatchers("/citylibrary/api/v1/publisher/get/**").authenticated();
+                                    .requestMatchers("/api/auth/**").permitAll()
+                                    .requestMatchers("/api/products/**").permitAll()
+                                    .requestMatchers("/api/categories/**").permitAll()
+                                    .requestMatchers("/api/carts/**").authenticated()
+                                    .requestMatchers("/api/cartItems/**").authenticated()
+                                    .requestMatchers("/api/orders/**").authenticated()
+                                    .requestMatchers("/api/orderItems/**").authenticated()
+                                    .requestMatchers("/citylibrary/api/v1/publisher/get/**").authenticated();
                         })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // .authenticationProvider(authenticationProvider())
-                // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(shopUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(cityLibraryUserDetailsService);
+        authenticationProvider.setUserDetailsService(shopUserDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
