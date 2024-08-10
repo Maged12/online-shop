@@ -26,3 +26,4 @@ target
 .mvn
 .idea
 .vscode
+src/main/resources/application.properties

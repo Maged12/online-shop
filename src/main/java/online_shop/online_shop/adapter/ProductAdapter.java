@@ -1,13 +1,12 @@
 package online_shop.online_shop.adapter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import online_shop.online_shop.domain.Category;
 import online_shop.online_shop.domain.Product;
 import online_shop.online_shop.dto.ProductRequestDto;
 import online_shop.online_shop.dto.ProductResponseDto;
-import online_shop.online_shop.dto.ProductResponseDto;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ProductAdapter {
 

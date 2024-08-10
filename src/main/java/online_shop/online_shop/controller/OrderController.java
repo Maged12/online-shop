@@ -1,19 +1,25 @@
 package online_shop.online_shop.controller;
 
-import online_shop.online_shop.adapter.OrderAdapter;
-import online_shop.online_shop.domain.Order;
-import online_shop.online_shop.domain.User;
-import online_shop.online_shop.dto.OrderDto;
-import online_shop.online_shop.dto.OrderItemDto;
-import online_shop.online_shop.repository.OrderRepository;
-import online_shop.online_shop.repository.UserRepository;
-import online_shop.online_shop.service.OrderService;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import online_shop.online_shop.dto.OrderRequestDto;
+import online_shop.online_shop.dto.OrderResponseDto;
+import online_shop.online_shop.repository.OrderRepository;
+import online_shop.online_shop.repository.UserRepository;
+import online_shop.online_shop.service.OrderService;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -27,44 +33,44 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrder(@PathVariable Long id) {
-        OrderDto orderDTO = orderService.getOrderById(id);
+        OrderRequestDto orderDTO = orderService.getOrderById(id);
         return new ResponseEntity<>(orderDTO, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderDto>> getAllOrders() {
-        List<OrderDto> orders = orderService.getAllOrders();
+    public ResponseEntity<List<OrderRequestDto>> getAllOrders() {
+        List<OrderRequestDto> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
 
-
     @PostMapping
-    public void createOrder(@RequestBody OrderDto orderDTO) {
-        Order order = OrderAdapter.getOrderFromOrderDto(orderDTO);
-        if (order.getUser() != null && order.getUser().getId() != null) {
-            // Fetch existing user from the database
-            User user = userRepository.findById(order.getUser().getId()).orElseThrow(() -> new RuntimeException("User not found"));
-            order.setUser(user);
-        } else {
-            // Save new user if needed
-            User savedUser = userRepository.save(order.getUser());
-            order.setUser(savedUser);
-        }
-        orderRepository.save(order);
+    public ResponseEntity<?> createOrder(@RequestBody OrderRequestDto orderDto) {
+
+        if (orderDto.userId() == null || orderDto.totalAmount() <= 0 || orderDto.orderItem() == null
+                || orderDto.orderItem().get().isEmpty())
+            return new ResponseEntity<>(Map.of(
+                    "message", "Order status updated successfully"), HttpStatus.BAD_REQUEST);
+
+        var order = orderService.createOrder(orderDto);
+        return new ResponseEntity<OrderResponseDto>(order, HttpStatus.CREATED);
+
     }
 
-    @PutMapping("/{orderId}/items/{orderItemId}")
-    public ResponseEntity<?> updateOrderItem(@PathVariable Long orderId, @PathVariable Long orderItemId, @RequestBody OrderItemDto orderItemDto) {
-        orderService.updateOrderItem(orderId, orderItemId, orderItemDto);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
+    // @PutMapping("/{orderId}/items/{orderItemId}")
+    // public ResponseEntity<?> updateOrderItem(@PathVariable Long orderId,
+    // @PathVariable Long orderItemId,
+    // @RequestBody OrderItemDto orderItemDto) {
+    // orderService.updateOrderItem(orderId, orderItemId, orderItemDto);
+    // return new ResponseEntity<>(HttpStatus.OK);
+    // }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody OrderDto orderDTO) {
-        orderService.updateOrder(id, orderDTO);
-        return new ResponseEntity<>(orderDTO, HttpStatus.OK);
+    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody String status) {
+        orderService.updateOrderStatus(id, status);
+        return new ResponseEntity<>(Map.of(
+                "message", "Order status updated successfully"), HttpStatus.OK);
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);

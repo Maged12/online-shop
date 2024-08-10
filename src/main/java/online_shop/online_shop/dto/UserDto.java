@@ -1,26 +1,28 @@
 package online_shop.online_shop.dto;
 
-
-import online_shop.online_shop.domain.Role;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import online_shop.online_shop.domain.Role;
 
 public class UserDto {
     private String name;
     private String email;
     private String password;
-    private List<OrderDto> orderDtos = new ArrayList<OrderDto>();
+    private List<OrderRequestDto> orderDtos = new ArrayList<OrderRequestDto>();
     private Role role;
 
-    public UserDto() {}
+    public UserDto() {
+    }
+
     public UserDto(String name, String email, String password, Role role) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.role = role;
     }
-    public void addOrderDto(OrderDto orderDto) {
+
+    public void addOrderDto(OrderRequestDto orderDto) {
         orderDtos.add(orderDto);
     }
 
@@ -48,11 +50,11 @@ public class UserDto {
         this.email = email;
     }
 
-    public List<OrderDto> getOrderDtos() {
+    public List<OrderRequestDto> getOrderDtos() {
         return orderDtos;
     }
 
-    public void setOrderDtos(List<OrderDto> orderDtos) {
+    public void setOrderDtos(List<OrderRequestDto> orderDtos) {
         this.orderDtos = orderDtos;
     }
 

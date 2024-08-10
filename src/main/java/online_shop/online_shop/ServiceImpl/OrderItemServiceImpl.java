@@ -1,21 +1,20 @@
 package online_shop.online_shop.ServiceImpl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import jakarta.transaction.Transactional;
 import online_shop.online_shop.adapter.OrderItemAdapter;
 import online_shop.online_shop.domain.Order;
 import online_shop.online_shop.domain.OrderItem;
-import online_shop.online_shop.domain.Product;
 import online_shop.online_shop.dto.OrderItemDto;
-import online_shop.online_shop.dto.ProductRequestDto;
 import online_shop.online_shop.repository.CategoryRepository;
 import online_shop.online_shop.repository.OrderItemRepository;
 import online_shop.online_shop.repository.OrderRepository;
 import online_shop.online_shop.repository.ProductRepository;
 import online_shop.online_shop.service.OrderItemService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -37,38 +36,34 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public OrderItemDto getOrderItemById(Long orderId, Long orderItemId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+    public OrderItemDto getOrderItemById(Long orderItemId) {
         OrderItem orderItem = orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new RuntimeException("OrderItem not found"));
         return OrderItemAdapter.getOrderItemDtoFromOrderItem(orderItem);
     }
 
-    @Override
-    public void addOrderItemToOrder(Long orderId, OrderItemDto orderItemDto) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+    // @Override
+    // public void addOrderItemToOrder(Long orderId, OrderItemDto orderItemDto) {
+    // Order order = orderRepository.findById(orderId)
+    // .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        Product product = productRepository.findByNameAndDescription(orderItemDto.getProductDto().getName(),
-                orderItemDto.getProductDto().getDescription())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+    // // Set the order item's price based on the product's price
+    // double price = product.getPrice();
 
-        // Set the order item's price based on the product's price
-        double price = product.getPrice();
+    // OrderItem orderItem = new OrderItem();
+    // orderItem.setOrder(order);
+    // orderItem.setProduct(product);
+    // orderItem.setQuantity(orderItemDto.getQuantity());
+    // orderItem.setPrice(price); // Set price directly from product
 
-        OrderItem orderItem = new OrderItem();
-        orderItem.setOrder(order);
-        orderItem.setProduct(product);
-        orderItem.setQuantity(orderItemDto.getQuantity());
-        orderItem.setPrice(price); // Set price directly from product
+    // orderItemRepository.save(orderItem);
 
-        orderItemRepository.save(orderItem);
-
-        // Update order total amount if needed
-        double totalAmount = order.getTotalAmount() + (price * orderItem.getQuantity());
-        order.setTotalAmount(totalAmount);
-        orderRepository.save(order);
-    }
+    // // Update order total amount if needed
+    // double totalAmount = order.getTotalAmount() + (price *
+    // orderItem.getQuantity());
+    // order.setTotalAmount(totalAmount);
+    // orderRepository.save(order);
+    // }
 
     @Override
     public void deleteOrderItem(Long orderId, Long orderItemId) {

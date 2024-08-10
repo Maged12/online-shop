@@ -1,78 +1,54 @@
 package online_shop.online_shop.ServiceImpl;
 
-import jakarta.transaction.Transactional;
-import online_shop.online_shop.adapter.OrderAdapter;
-import online_shop.online_shop.domain.Order;
-import online_shop.online_shop.domain.OrderItem;
-import online_shop.online_shop.dto.OrderDto;
-import online_shop.online_shop.dto.OrderItemDto;
-import online_shop.online_shop.repository.OrderItemRepository;
-import online_shop.online_shop.repository.OrderRepository;
-import online_shop.online_shop.service.OrderService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import java.util.List;
+import jakarta.transaction.Transactional;
+import online_shop.online_shop.adapter.OrderAdapter;
+import online_shop.online_shop.domain.Order;
+import online_shop.online_shop.dto.OrderRequestDto;
+import online_shop.online_shop.dto.OrderResponseDto;
+import online_shop.online_shop.repository.OrderRepository;
+import online_shop.online_shop.service.OrderService;
 
 @Service
 @Transactional
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
+
     @Autowired
-    OrderItemRepository orderItemRepository;
-
+    private OrderAdapter orderAdapter;
 
     @Override
-    public void createOrder(OrderDto orderDTO) {
-        Order order = OrderAdapter.getOrderFromOrderDto(orderDTO);
-        orderRepository.save(order);
+    public OrderResponseDto createOrder(OrderRequestDto orderDto) {
+
+        var order = orderAdapter.toEntity(orderDto);
+
+        var savedOrder = orderRepository.save(order);
+
+        return orderAdapter.toResponseDto(savedOrder);
     }
 
     @Override
-    public OrderDto getOrderById(Long id) {
+    public OrderRequestDto getOrderById(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
-        return OrderAdapter.getOrderDtoFromOrder(order);
+        return orderAdapter.getOrderDtoFromOrder(order);
     }
 
     @Override
-    public List<OrderDto> getAllOrders() {
-        return OrderAdapter.getOrderDtoListFromOrderList(orderRepository.findAll());
+    public List<OrderRequestDto> getAllOrders() {
+        return orderAdapter.getOrderDtoListFromOrderList(orderRepository.findAll());
     }
-
 
     @Override
-    public void updateOrder(Long id, OrderDto orderDTO) {
-        Order order = orderRepository.findById(id).orElse(null);
-        if (order != null) {
-            order.setStatus(orderDTO.getStatus());
-            order.setTotalAmount(orderDTO.getTotalAmount());
-            orderRepository.save(order);
-        }
-    }
-
-
-    @Override
-    public void updateOrderItem(Long orderId, Long orderItemId, OrderItemDto orderItemDto) {
-        Order order = orderRepository.findById(orderId).orElse(null);
-        if (order != null) {
-            OrderItem orderItem = orderItemRepository.findById(orderItemId).orElse(null);
-            if (orderItem != null) {
-                orderItem.setQuantity(orderItemDto.getQuantity());
-                orderItem.setPrice(orderItemDto.getPrice());
-                orderItemRepository.save(orderItem);
-                updateOrderTotalAmount(order);
-            }
-        }
-    }
-
-    private void updateOrderTotalAmount(Order order) {
-        double newTotalAmount = order.getOrderItems().stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity())
-                .sum();
-        order.setTotalAmount(newTotalAmount);
+    public void updateOrderStatus(Long id, String newStatus) {
+        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        order.setStatus(newStatus);
         orderRepository.save(order);
+
     }
 
     @Override

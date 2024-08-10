@@ -22,17 +22,19 @@ public class OrderItemController {
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 
-    @GetMapping("/{orderId}/items/{orderItemId}")
-    public ResponseEntity<OrderItemDto> getOrderItem(@PathVariable Long orderId, @PathVariable Long orderItemId) {
-        OrderItemDto orderItemDto = orderItemService.getOrderItemById(orderId, orderItemId);
-        return new ResponseEntity<>(orderItemDto, HttpStatus.OK);
-    }
+    // @GetMapping("/{orderId}/items/{orderItemId}")
+    // public ResponseEntity<OrderItemDto> getOrderItem( @PathVariable Long
+    // orderItemId) {
+    // OrderItemDto orderItemDto = orderItemService.getOrderItemById( orderItemId);
+    // return new ResponseEntity<>(orderItemDto, HttpStatus.OK);
+    // }
 
-    @PostMapping("/{orderId}/items")
-    public ResponseEntity<?> addOrderItemToOrder(@PathVariable Long orderId, @RequestBody OrderItemDto orderItemDto) {
-        orderItemService.addOrderItemToOrder(orderId, orderItemDto);
-        return new ResponseEntity<>(orderItemDto, HttpStatus.CREATED);
-    }
+    // @PostMapping("/{orderId}/items")
+    // public ResponseEntity<?> addOrderItemToOrder(@PathVariable Long orderId,
+    // @RequestBody OrderItemDto orderItemDto) {
+    // orderItemService.addOrderItemToOrder(orderId, orderItemDto);
+    // return new ResponseEntity<>(orderItemDto, HttpStatus.CREATED);
+    // }
 
     @DeleteMapping("/{orderId}/items/{orderItemId}")
     public ResponseEntity<Void> deleteOrderItem(@PathVariable Long orderId, @PathVariable Long orderItemId) {
