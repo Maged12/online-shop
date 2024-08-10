@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
-import online_shop.online_shop.ServiceImpl.FileStorageService;
 import online_shop.online_shop.dto.ProductRequestDto;
 import online_shop.online_shop.dto.ProductResponseDto;
 import online_shop.online_shop.service.ProductService;
+import online_shop.online_shop.util.FileStorageService;
 
 @RestController
 @RequestMapping("/api/products")

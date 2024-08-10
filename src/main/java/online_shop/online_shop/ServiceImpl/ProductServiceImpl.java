@@ -10,6 +10,8 @@ import online_shop.online_shop.dto.ProductRequestDto;
 import online_shop.online_shop.dto.ProductResponseDto;
 import online_shop.online_shop.repository.ProductRepository;
 import online_shop.online_shop.service.ProductService;
+import online_shop.online_shop.util.FileStorageService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
