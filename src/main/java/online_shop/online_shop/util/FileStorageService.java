@@ -1,4 +1,4 @@
-package online_shop.online_shop.ServiceImpl;
+package online_shop.online_shop.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;

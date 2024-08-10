@@ -1,4 +1,4 @@
-package online_shop.online_shop.ServiceImpl;
+package online_shop.online_shop.util;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import online_shop.online_shop.repository.UserRepository;
 
 @Service
-public class CityLibraryUserDetailsService
+public class ShopUserDetailsService
         implements UserDetailsService {
     private UserRepository userRepository;
 
-    public CityLibraryUserDetailsService(UserRepository userRepository) {
+    public ShopUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
