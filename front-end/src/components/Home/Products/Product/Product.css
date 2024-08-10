@@ -3,11 +3,11 @@
   padding: 1rem;
   background: #ffffff;
   box-shadow: 0px 0px 10px #e8e8e8;
-  transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 .product-container:hover {
@@ -15,8 +15,8 @@
 }
 
 .image img {
-  width: 50%;
-  height: 100%;
+  width: 40%;
+  height: 40%;
   object-fit: contain;
 }
 
@@ -62,6 +62,7 @@
   padding: 10px;
   -webkit-border-radius: 5px;
 }
+
 .name-price-product {
   display: flex;
   justify-content: space-between;
