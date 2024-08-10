@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto createOrder(OrderRequestDto orderDto) {
 
-        var order = orderAdapter.toEntity(orderDto);
+        var order = orderAdapter.toEntity(orderDto, null);
 
         var savedOrder = orderRepository.save(order);
 
@@ -33,22 +33,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderRequestDto getOrderById(Long id) {
+    public OrderResponseDto getOrderById(Long id) {
         Order order = orderRepository.findById(id).orElse(null);
-        return orderAdapter.getOrderDtoFromOrder(order);
+        return orderAdapter.toResponseDto(order);
     }
 
     @Override
-    public List<OrderRequestDto> getAllOrders() {
-        return orderAdapter.getOrderDtoListFromOrderList(orderRepository.findAll());
+    public List<OrderResponseDto> getAllOrders() {
+        return orderRepository.findAll().stream().map(orderAdapter::toResponseDto).toList();
     }
 
     @Override
-    public void updateOrderStatus(Long id, String newStatus) {
+    public OrderResponseDto updateOrderStatus(Long id, String newStatus) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
-        order.setStatus(newStatus);
-        orderRepository.save(order);
 
+        order.setStatus(newStatus);
+        var updatedOrder = orderRepository.save(order);
+
+        return orderAdapter.toResponseDto(updatedOrder);
     }
 
     @Override

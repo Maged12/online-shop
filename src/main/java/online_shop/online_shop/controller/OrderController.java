@@ -32,14 +32,14 @@ public class OrderController {
     UserRepository userRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrder(@PathVariable Long id) {
-        OrderRequestDto orderDTO = orderService.getOrderById(id);
+    public ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long id) {
+        OrderResponseDto orderDTO = orderService.getOrderById(id);
         return new ResponseEntity<>(orderDTO, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderRequestDto>> getAllOrders() {
-        List<OrderRequestDto> orders = orderService.getAllOrders();
+    public ResponseEntity<List<OrderResponseDto>> getAllOrders() {
+        List<OrderResponseDto> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
 
@@ -65,10 +65,9 @@ public class OrderController {
     // }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateOrder(@PathVariable Long id, @RequestBody String status) {
-        orderService.updateOrderStatus(id, status);
-        return new ResponseEntity<>(Map.of(
-                "message", "Order status updated successfully"), HttpStatus.OK);
+    public ResponseEntity<OrderResponseDto> updateOrder(@PathVariable Long id, @RequestBody String status) {
+        var orderResponse = orderService.updateOrderStatus(id, status);
+        return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

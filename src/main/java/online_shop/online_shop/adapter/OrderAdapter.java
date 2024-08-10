@@ -28,21 +28,6 @@ public class OrderAdapter {
     @Autowired
     private ProductRepository productRepository;
 
-    public OrderRequestDto getOrderDtoFromOrder(Order order) {
-        if (order == null)
-            return null;
-        OrderRequestDto orderDto = new OrderRequestDto(order.getTotalAmount(), order.getUser().getId(),
-                Optional.of(
-                        order.getOrderItems().stream().map(OrderItemAdapter::getOrderItemDtoFromOrderItem).toList()));
-        return orderDto;
-    }
-
-    public List<OrderRequestDto> getOrderDtoListFromOrderList(List<Order> orderList) {
-        return orderList.stream()
-                .map(this::getOrderDtoFromOrder)
-                .collect(Collectors.toList());
-    }
-
     public OrderResponseDto toResponseDto(Order order) {
         var orderUser = new UserResponseDto(order.getUser().getId(), order.getUser().getName(),
                 order.getUser().getEmail());
@@ -56,10 +41,10 @@ public class OrderAdapter {
                 orderUser, orderItemsList);
     }
 
-    public Order toEntity(OrderRequestDto orderDto) {
+    public Order toEntity(OrderRequestDto orderDto, String status) {
         Order order = new Order();
         order.setOrderDate(new Date());
-        order.setStatus("Pending");
+        order.setStatus(status == null ? "Pending" : status);
         order.setTotalAmount(orderDto.totalAmount());
 
         final User user = userRepository.findById(orderDto.userId())
