@@ -18,6 +18,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import online_shop.online_shop.filter.JWTAuthFilter;
 import online_shop.online_shop.util.ShopUserDetailsService;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +33,7 @@ public class WebAPISecurityConfig {
     private JWTAuthFilter jwtAuthFilter;
 
     public WebAPISecurityConfig(ShopUserDetailsService cityLibraryUserDetailsService,
-            JWTAuthFilter jwtAuthFilter) {
+                                JWTAuthFilter jwtAuthFilter) {
         this.shopUserDetailsService = cityLibraryUserDetailsService;
         this.jwtAuthFilter = jwtAuthFilter;
     }
@@ -37,6 +42,7 @@ public class WebAPISecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
             throws Exception {
         return httpSecurity
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> {
@@ -76,5 +82,18 @@ public class WebAPISecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Update with your frontend URL
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);  // Allow credentials like cookies
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
