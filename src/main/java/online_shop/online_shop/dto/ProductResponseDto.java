@@ -1,21 +1,21 @@
 package online_shop.online_shop.dto;
 
-import online_shop.online_shop.domain.Category;
-
-public class ProductDto {
+public class ProductResponseDto {
     private String name;
     private String description;
     private double price;
     private CategoryDto categoryDto;
-    private byte[] image;
+    private String imageUrl;
 
-    public ProductDto() {}
-    public ProductDto(String name, String description, double price, CategoryDto categoryDto, byte[] image) {
+    public ProductResponseDto() {
+    }
+
+    public ProductResponseDto(String name, String description, double price, CategoryDto categoryDto, String imageUrl) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.categoryDto = categoryDto;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {
@@ -50,10 +50,11 @@ public class ProductDto {
         this.categoryDto = categoryDto;
     }
 
-    public byte[] getImage() {
-        return image;
+    public String getImage() {
+        return imageUrl;
     }
-    public void setImage(byte[] image) {
-        this.image = image;
+
+    public void setImage(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

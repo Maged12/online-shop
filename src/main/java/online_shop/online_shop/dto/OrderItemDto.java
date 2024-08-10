@@ -3,11 +3,13 @@ package online_shop.online_shop.dto;
 public class OrderItemDto {
     private int quantity;
     private double price;
-    private ProductDto productDto;
+    private ProductResponseDto productDto;
     private OrderDto orderDto;
 
-    public OrderItemDto() {}
-    public OrderItemDto(int quantity, double price, ProductDto productDto, OrderDto orderDto) {
+    public OrderItemDto() {
+    }
+
+    public OrderItemDto(int quantity, double price, ProductResponseDto productDto, OrderDto orderDto) {
         this.quantity = quantity;
         this.price = price;
         this.productDto = productDto;
@@ -30,11 +32,11 @@ public class OrderItemDto {
         this.price = price;
     }
 
-    public ProductDto getProductDto() {
+    public ProductResponseDto getProductDto() {
         return productDto;
     }
 
-    public void setProductDto(ProductDto productDto) {
+    public void setProductDto(ProductResponseDto productDto) {
         this.productDto = productDto;
     }
 

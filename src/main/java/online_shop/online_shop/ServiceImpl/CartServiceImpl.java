@@ -5,16 +5,12 @@ import online_shop.online_shop.adapter.*;
 import online_shop.online_shop.domain.*;
 import online_shop.online_shop.dto.CartDto;
 import online_shop.online_shop.dto.CartItemDto;
-import online_shop.online_shop.dto.ProductDto;
 import online_shop.online_shop.repository.*;
 import online_shop.online_shop.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.Collections;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

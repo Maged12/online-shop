@@ -1,13 +1,18 @@
 package online_shop.online_shop.service;
 
-import online_shop.online_shop.dto.ProductDto;
+import online_shop.online_shop.dto.ProductRequestDto;
+import online_shop.online_shop.dto.ProductResponseDto;
 
 import java.util.List;
 
 public interface ProductService {
-    void createProduct(ProductDto productDto);
-    ProductDto getProductById(Long id);
-    List<ProductDto> getAllProducts();
-    void updateProduct(Long id, ProductDto productDto);
+    ProductResponseDto createProduct(ProductRequestDto productDto);
+
+    ProductResponseDto getProductById(Long id);
+
+    List<ProductResponseDto> getAllProducts();
+
+    void updateProduct(Long id, ProductRequestDto productDto);
+
     void deleteProduct(Long id);
 }

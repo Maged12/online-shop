@@ -6,7 +6,7 @@ import online_shop.online_shop.domain.Order;
 import online_shop.online_shop.domain.OrderItem;
 import online_shop.online_shop.domain.Product;
 import online_shop.online_shop.dto.OrderItemDto;
-import online_shop.online_shop.dto.ProductDto;
+import online_shop.online_shop.dto.ProductRequestDto;
 import online_shop.online_shop.repository.CategoryRepository;
 import online_shop.online_shop.repository.OrderItemRepository;
 import online_shop.online_shop.repository.OrderRepository;
@@ -14,7 +14,6 @@ import online_shop.online_shop.repository.ProductRepository;
 import online_shop.online_shop.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -40,7 +39,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public OrderItemDto getOrderItemById(Long orderId, Long orderItemId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
-        OrderItem orderItem = orderItemRepository.findById(orderItemId).orElseThrow(() -> new RuntimeException("OrderItem not found"));
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new RuntimeException("OrderItem not found"));
         return OrderItemAdapter.getOrderItemDtoFromOrderItem(orderItem);
     }
 
@@ -50,7 +50,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
         Product product = productRepository.findByNameAndDescription(orderItemDto.getProductDto().getName(),
-                        orderItemDto.getProductDto().getDescription())
+                orderItemDto.getProductDto().getDescription())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         // Set the order item's price based on the product's price
@@ -60,7 +60,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderItem.setOrder(order);
         orderItem.setProduct(product);
         orderItem.setQuantity(orderItemDto.getQuantity());
-        orderItem.setPrice(price);  // Set price directly from product
+        orderItem.setPrice(price); // Set price directly from product
 
         orderItemRepository.save(orderItem);
 
@@ -70,11 +70,11 @@ public class OrderItemServiceImpl implements OrderItemService {
         orderRepository.save(order);
     }
 
-
     @Override
     public void deleteOrderItem(Long orderId, Long orderItemId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
-        OrderItem orderItem = orderItemRepository.findById(orderItemId).orElseThrow(() -> new RuntimeException("OrderItem not found"));
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(() -> new RuntimeException("OrderItem not found"));
 
         // Adjust the order total amount
         double newTotalAmount = order.getTotalAmount() - orderItem.getPrice() * orderItem.getQuantity();

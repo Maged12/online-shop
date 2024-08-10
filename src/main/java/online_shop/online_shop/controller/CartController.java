@@ -2,7 +2,7 @@ package online_shop.online_shop.controller;
 
 import online_shop.online_shop.dto.CartDto;
 import online_shop.online_shop.dto.CartItemDto;
-import online_shop.online_shop.dto.ProductDto;
+import online_shop.online_shop.dto.ProductRequestDto;
 import online_shop.online_shop.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,6 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-
     @GetMapping
     public ResponseEntity<?> getAllCarts() {
         List<CartDto> carts = cartService.getAllCarts();
@@ -29,7 +28,6 @@ public class CartController {
         CartDto cartDTO = cartService.getCartById(cartId);
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
-
 
     @PostMapping("/{cartId}/items")
     public ResponseEntity<String> addItemToCart(@PathVariable Long cartId, @RequestBody CartItemDto cartItemDto) {

@@ -15,17 +15,20 @@ public class Product {
     @ManyToOne
     @JsonBackReference
     private Category category;
-    @Lob
-    private byte[] image;
 
-    public Product() {}
-    public Product(String name, String description, double price, Category category, byte[] image) {
+    private String imageUrl;
+
+    public Product() {
+    }
+
+    public Product(String name, String description, double price, Category category, String imageUrl) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.category = category;
-        this.image = image;
+        this.imageUrl = imageUrl;
     }
+
     public Long getId() {
         return id;
     }
@@ -65,10 +68,12 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
-    public byte[] getImage() {
-        return image;
+
+    public String getImage() {
+        return imageUrl;
     }
-    public void setImage(byte[] image) {
-        this.image = image;
+
+    public void setImage(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

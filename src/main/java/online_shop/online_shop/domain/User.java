@@ -3,11 +3,16 @@ package online_shop.online_shop.domain;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +24,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String name, String email, String password, Role role) {
         this.name = name;
@@ -78,5 +84,17 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        String userRoles = getRole().toString();
+        Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }

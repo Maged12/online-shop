@@ -1,19 +1,19 @@
 package online_shop.online_shop.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties({"cartDto"})
+@JsonIgnoreProperties({ "cartDto" })
 public class CartItemDto {
     private CartDto cartDto;
-    private ProductDto productDto;
+    private ProductResponseDto productDto;
 
     private int quantity;
     private double price;
 
     public CartItemDto() {
     }
-    public CartItemDto(CartDto cartDto, ProductDto productDto) {
+
+    public CartItemDto(CartDto cartDto, ProductResponseDto productDto) {
         this.cartDto = cartDto;
         this.productDto = productDto;
     }
@@ -26,11 +26,11 @@ public class CartItemDto {
         this.cartDto = cartDto;
     }
 
-    public ProductDto getProductDto() {
+    public ProductResponseDto getProductDto() {
         return productDto;
     }
 
-    public void setProductDto(ProductDto productDto) {
+    public void setProductDto(ProductResponseDto productDto) {
         this.productDto = productDto;
     }
 

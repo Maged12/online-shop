@@ -6,11 +6,15 @@ import java.util.List;
 public class CategoryDto {
     private String name;
     private String description;
-    private List<ProductDto> productDtos = new ArrayList<ProductDto>();
+    private List<ProductResponseDto> productDtos = new ArrayList<ProductResponseDto>();
 
-    public CategoryDto() {}
-    public CategoryDto(String name, String description) {}
-    public void addProductDto(ProductDto productDto) {
+    public CategoryDto() {
+    }
+
+    public CategoryDto(String name, String description) {
+    }
+
+    public void addProductDto(ProductResponseDto productDto) {
         productDtos.add(productDto);
     }
 
@@ -30,11 +34,11 @@ public class CategoryDto {
         this.name = name;
     }
 
-    public List<ProductDto> getProductDtos() {
+    public List<ProductResponseDto> getProductDtos() {
         return productDtos;
     }
 
-    public void setProductDtos(List<ProductDto> productDtos) {
+    public void setProductDtos(List<ProductResponseDto> productDtos) {
         this.productDtos = productDtos;
     }
 }

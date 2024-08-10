@@ -1,47 +1,65 @@
 package online_shop.online_shop.ServiceImpl;
 
 import jakarta.transaction.Transactional;
+
 import online_shop.online_shop.adapter.ProductAdapter;
+import online_shop.online_shop.domain.Category;
 import online_shop.online_shop.domain.Product;
-import online_shop.online_shop.dto.ProductDto;
+import online_shop.online_shop.dto.FileUploadResponse;
+import online_shop.online_shop.dto.ProductRequestDto;
+import online_shop.online_shop.dto.ProductResponseDto;
 import online_shop.online_shop.repository.ProductRepository;
 import online_shop.online_shop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.util.List;
+
 @Service
 @Transactional
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     @Override
-    public void createProduct(ProductDto productDto) {
-        Product product = ProductAdapter.getProductFromProductDto(productDto);
+    public ProductResponseDto createProduct(ProductRequestDto productDto) {
+        final FileUploadResponse response = saveImageUrl(productDto.image());
+        Product product = ProductAdapter.getProductFromProductRequsetDto(productDto, response.getFileDownloadUri());
         productRepository.save(product);
+        return ProductAdapter.getProductDtoFromProduct(product);
     }
 
     @Override
-    public ProductDto getProductById(Long id) {
+    public ProductResponseDto getProductById(Long id) {
         Product product = productRepository.findById(id).orElse(null);
         return ProductAdapter.getProductDtoFromProduct(product);
     }
 
     @Override
-    public List<ProductDto> getAllProducts() {
+    public List<ProductResponseDto> getAllProducts() {
         return ProductAdapter.getProductDtoListFromProductList(productRepository.findAll());
     }
 
     @Override
-    public void updateProduct(Long id, ProductDto productDto) {
+    public void updateProduct(Long id, ProductRequestDto productDto) {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null) {
-            product.setName(productDto.getName());
-            product.setDescription(productDto.getDescription());
-            product.setPrice(productDto.getPrice());
-            product.setCategory(ProductAdapter.getProductFromProductDto(productDto).getCategory());
-            product.setImage(productDto.getImage());
+            final FileUploadResponse response = saveImageUrl(productDto.image());
+            if (response != null) {
+                product.setImage(response.getFileDownloadUri());
+            }
+            product.setName(productDto.name());
+            product.setDescription(productDto.description());
+            product.setPrice(productDto.price());
+            var category = new Category();
+            category.setId(Long.parseLong(productDto.categoryId()));
+            product.setCategory(category);
             productRepository.save(product);
         }
     }
@@ -50,5 +68,17 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
-}
 
+    public FileUploadResponse saveImageUrl(MultipartFile file) {
+        if (file == null) {
+            return null;
+        }
+        String fileName = fileStorageService.storeFile(file);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/products/downloadFile/")
+                .path(fileName)
+                .toUriString();
+        return new FileUploadResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
+    }
+}

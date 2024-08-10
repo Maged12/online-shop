@@ -3,12 +3,10 @@ package online_shop.online_shop.adapter;
 import online_shop.online_shop.domain.CartItem;
 import online_shop.online_shop.domain.Product;
 import online_shop.online_shop.dto.CartItemDto;
-import online_shop.online_shop.dto.ProductDto;
+import online_shop.online_shop.dto.ProductRequestDto;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class CartItemAdapter {
     public static CartItem getCartItemFromCartItemDto(CartItemDto cartItemDto) {
@@ -23,7 +21,7 @@ public class CartItemAdapter {
     }
 
     public static CartItemDto getCartItemDtoFromCartItem(CartItem cartItem) {
-       if (cartItem == null || cartItem.getProduct() == null) {
+        if (cartItem == null || cartItem.getProduct() == null) {
             throw new IllegalArgumentException("CartItem and Product cannot be null");
         }
         CartItemDto cartItemDto = new CartItemDto();
@@ -34,7 +32,7 @@ public class CartItemAdapter {
 
     }
 
-    public static List<CartItem> getCartItemListFromCartItemDtoList(List<CartItemDto> cartItemDtoList ){
+    public static List<CartItem> getCartItemListFromCartItemDtoList(List<CartItemDto> cartItemDtoList) {
         List<CartItem> cartItemList = new ArrayList<>();
         for (CartItemDto cartItemDto : cartItemDtoList) {
             CartItem cartItem = getCartItemFromCartItemDto(cartItemDto);
