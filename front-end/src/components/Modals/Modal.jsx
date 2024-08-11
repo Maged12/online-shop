@@ -33,8 +33,13 @@ const Modal = ({ header, submitAction, buttonText, isRegister }) => {
     }
     // register or login
     if (isRegister) {
+      const registrationData = {
+        name: data.username,
+        email: data.email,
+        password: data.password,
+      };
       auth
-        .register(data)
+        .register(registrationData)
         .then(() => {
           // close modal
           modal.closeModal();

@@ -22,6 +22,8 @@ const initialState: State = {
   jwtToken: getUserFromLocalStorage()?.jwtToken || null,
 };
 
+const baseUrl = process.env.REACT_APP_BASE_URL;
+
 const actions = Object.freeze({
   SET_USER: "SET_USER" as const,
   LOGOUT: "LOGOUT" as const,
@@ -45,9 +47,9 @@ const reducer = (state: State, action: Action): State => {
 const useAuth = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const register = async (userInfo: User) => {
+  const register = async (userInfo: { username: string; email: string; password: string; }) => {
     try {
-      const response = await fetch(`url/register`, {
+      const response = await fetch(`${baseUrl}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +67,6 @@ const useAuth = () => {
         localStorage.setItem("user", JSON.stringify({ user: data.user, jwtToken: data.jwtToken }));
         dispatch({ type: actions.SET_USER, user: data.user, jwtToken: data.jwtToken });
         toast.success("Registration successful");
-        // login user
       }
     } catch (error) {
       toast.error("There was a problem registering, try again");
@@ -74,7 +75,7 @@ const useAuth = () => {
 
   const login = async (userInfo: { email: string; password: string; }) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/auth/login`, {
+      const response = await fetch(`${baseUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

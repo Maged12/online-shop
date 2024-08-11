@@ -163,7 +163,7 @@ const useStore = () => {
       // Duplicate each product 3 times
       const transformedData: Product[] = apiData.flatMap((item: any, index: number) => {
         // Creating an array with 3 identical products for each API item
-        return Array.from({ length: 3 }, (_, i) => ({
+        return Array.from({ length: 8 }, (_, i) => ({
           _id: `${index + 1}-${i + 1}`, // Generate a unique ID for each duplicate
           name: item.name,
           description: item.description,
