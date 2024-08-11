@@ -19,7 +19,7 @@ public class OrderAdapter {
     public OrderResponseDto toResponseDto(Order order) {
 
         var orderUser = new UserResponseDto(order.getUser().getId(), order.getUser().getName(),
-                order.getUser().getEmail());
+                order.getUser().getEmail(), order.getUser().getRole());
 
         var orderItemsList = OrderItemAdapter.getOrderItemResponseDtoListFromOrderItemList(order.getOrderItems());
 
