@@ -1,7 +1,10 @@
 package online_shop.online_shop.config;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,14 +18,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import online_shop.online_shop.filter.JWTAuthFilter;
-import online_shop.online_shop.util.ShopUserDetailsService;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import online_shop.online_shop.domain.Role;
+import online_shop.online_shop.filter.JWTAuthFilter;
+import online_shop.online_shop.util.ShopUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -33,7 +35,7 @@ public class WebAPISecurityConfig {
     private JWTAuthFilter jwtAuthFilter;
 
     public WebAPISecurityConfig(ShopUserDetailsService cityLibraryUserDetailsService,
-                                JWTAuthFilter jwtAuthFilter) {
+            JWTAuthFilter jwtAuthFilter) {
         this.shopUserDetailsService = cityLibraryUserDetailsService;
         this.jwtAuthFilter = jwtAuthFilter;
     }
@@ -47,14 +49,19 @@ public class WebAPISecurityConfig {
                 .authorizeHttpRequests(
                         auth -> {
                             auth
-                                    .requestMatchers("/api/auth/**").permitAll()
-                                    .requestMatchers("/api/products/**").permitAll()
-                                    .requestMatchers("/api/categories/**").permitAll()
+
+                                    .requestMatchers("/api/auth/admin/register").hasRole(Role.ADMIN.toString())
+                                    .requestMatchers("/api/orders/me").hasRole(Role.CUSTOMER.toString())
+                                    .requestMatchers(HttpMethod.POST, "/api/orders").hasRole(Role.CUSTOMER.toString())
+                                    .requestMatchers(HttpMethod.GET, "/api/orders").hasRole(Role.ADMIN.toString())
                                     .requestMatchers("/api/carts/**").authenticated()
                                     .requestMatchers("/api/cartItems/**").authenticated()
                                     .requestMatchers("/api/orders/**").authenticated()
                                     .requestMatchers("/api/orderItems/**").authenticated()
-                                    .requestMatchers("/citylibrary/api/v1/publisher/get/**").authenticated();
+                                    .requestMatchers("/citylibrary/api/v1/publisher/get/**").authenticated()
+                                    .requestMatchers("/api/auth/**").permitAll()
+                                    .requestMatchers("/api/products/**").permitAll()
+                                    .requestMatchers("/api/categories/**").permitAll();
                         })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -90,7 +97,7 @@ public class WebAPISecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Update with your frontend URL
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);  // Allow credentials like cookies
+        configuration.setAllowCredentials(true); // Allow credentials like cookies
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -40,13 +40,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerNewAdmin(UserRegisterRequest userRegisterRequest) {
-        User user = new User();
-        user.setName(userRegisterRequest.name());
-        user.setEmail(userRegisterRequest.email());
-        user.setPassword(userRegisterRequest.password());
-        user.setRole(Role.ADMIN);
-        return userRepository.save(user);
+    public User registerNewAdmin(UserRegisterRequest userRegisterRequest) throws Exception {
+        try {
+            User user = new User();
+            user.setName(userRegisterRequest.name());
+            user.setEmail(userRegisterRequest.email());
+            String code = bcryptEncoder.encode(userRegisterRequest.password()).toString();
+            user.setPassword(code);
+            user.setRole(Role.ADMIN);
+            return userRepository.save(user);
+        } catch (Exception e) {
+            throw new Exception("Email already exists");
+        }
     }
 
 }

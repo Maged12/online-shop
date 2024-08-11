@@ -20,12 +20,12 @@ import online_shop.online_shop.util.ShopUserDetailsService;
 public class JWTAuthFilter extends OncePerRequestFilter {
 
     private JWTMgmtUtilityService jwtMgmtUtilityService;
-    private ShopUserDetailsService cityLibraryUserDetailsService;
+    private ShopUserDetailsService userDetailsService;
 
     public JWTAuthFilter(JWTMgmtUtilityService jwtMgmtUtilityService,
-            ShopUserDetailsService cityLibraryUserDetailsService) {
+            ShopUserDetailsService userDetailsService) {
         this.jwtMgmtUtilityService = jwtMgmtUtilityService;
-        this.cityLibraryUserDetailsService = cityLibraryUserDetailsService;
+        this.userDetailsService = userDetailsService;
     }
 
     @SuppressWarnings("null")
@@ -44,7 +44,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         }
         if (username != null
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = cityLibraryUserDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtMgmtUtilityService.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,

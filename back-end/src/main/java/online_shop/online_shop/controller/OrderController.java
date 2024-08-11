@@ -6,6 +6,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import online_shop.online_shop.adapter.OrderAdapter;
+import online_shop.online_shop.domain.User;
 import online_shop.online_shop.dto.request.OrderRequestDto;
 import online_shop.online_shop.dto.response.OrderResponseDto;
-import online_shop.online_shop.repository.OrderRepository;
-import online_shop.online_shop.repository.UserRepository;
 import online_shop.online_shop.service.OrderService;
 
 @RestController
@@ -26,15 +28,25 @@ import online_shop.online_shop.service.OrderService;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
     @Autowired
-    OrderRepository orderRepository;
-    @Autowired
-    UserRepository userRepository;
+    private OrderAdapter orderAdapter;
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long id) {
         OrderResponseDto orderDTO = orderService.getOrderById(id);
         return new ResponseEntity<>(orderDTO, HttpStatus.OK);
+    }
+
+    @Transactional
+    @GetMapping("/me")
+    public ResponseEntity<?> getOrderCurrrentUserOrders() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        var orders = user.getOrders().stream().map(orderAdapter::toResponseDto).toList();
+
+        return new ResponseEntity<>(orders,
+                HttpStatus.OK);
     }
 
     @GetMapping

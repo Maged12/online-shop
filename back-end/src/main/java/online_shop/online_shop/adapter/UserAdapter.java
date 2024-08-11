@@ -2,6 +2,7 @@ package online_shop.online_shop.adapter;
 
 import online_shop.online_shop.domain.User;
 import online_shop.online_shop.dto.UserDto;
+import online_shop.online_shop.dto.UserResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +17,11 @@ public class UserAdapter {
         return user;
     }
 
-    public static UserDto getUserDtoFromUser(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setRole(user.getRole());
-        return userDto;
+    public static UserResponseDto getUserDtoFromUser(User user) {
+        UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getName(), user.getEmail(),
+                user.getRole());
+
+        return userResponseDto;
     }
 
     public static List<User> getUserListFromUserDtoList(List<UserDto> userDtoList) {
@@ -33,8 +32,8 @@ public class UserAdapter {
         return userList;
     }
 
-    public static List<UserDto> getUserDtoListFromUserList(List<User> userList) {
-        List<UserDto> userDtoList = new ArrayList<>();
+    public static List<UserResponseDto> getUserDtoListFromUserList(List<User> userList) {
+        List<UserResponseDto> userDtoList = new ArrayList<>();
         for (User user : userList) {
             userDtoList.add(getUserDtoFromUser(user));
         }

@@ -88,4 +88,27 @@ public class UserAuthController {
         }
     }
 
+    @PostMapping(value = { "/admin/register" })
+    public ResponseEntity<?> registerAdmin(@Valid @RequestBody UserRegisterRequest userAuthRequest) {
+        UserAuthResponse userAuthResponse = null;
+        try {
+
+            var email = userAuthRequest.email();
+
+            var user = userService.registerNewAdmin(userAuthRequest);
+
+            var jwtToken = jwtMgmtUtilityService.generateToken(email);
+
+            if (user != null) {
+                userAuthResponse = new UserAuthResponse(jwtToken,
+                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+                return ResponseEntity.ok(userAuthResponse);
+            }
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", ex.getMessage()));
+        }
+    }
+
 }

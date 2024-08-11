@@ -8,5 +8,5 @@ public interface UserService {
 
     User registerNewUser(UserRegisterRequest userRegisterRequest) throws Exception;
 
-    User registerNewAdmin(UserRegisterRequest userRegisterRequest);
+    User registerNewAdmin(UserRegisterRequest userRegisterRequest) throws Exception;
 }
