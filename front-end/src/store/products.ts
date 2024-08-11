@@ -105,7 +105,7 @@ const reducer = (state: State, action: Action): State => {
 
         return {
           ...state,
-          cartTotal: state.cartTotal + productToAddQuantity.price,
+          cartTotal: parseFloat((state.cartTotal + productToAddQuantity.price).toFixed(2)),
         };
       }
       return state;
@@ -119,7 +119,7 @@ const reducer = (state: State, action: Action): State => {
 
         return {
           ...state,
-          cartTotal: state.cartTotal - productToReduceQuantity.price,
+          cartTotal: parseFloat((state.cartTotal - productToReduceQuantity.price).toFixed(2)),
         };
       }
       return state;

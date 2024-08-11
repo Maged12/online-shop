@@ -26,7 +26,7 @@ const Product = ({ product }) => {
           <div className="name-price-product">
             <h4>{product?.name}</h4>
             <h5>
-              $<span className="actual-product-price">{product?.price}.00</span>
+              $<span className="actual-product-price">{product?.price}</span>
             </h5>
           </div>
           <h5>{product?.description}</h5>
@@ -45,6 +45,7 @@ const Product = ({ product }) => {
                   return;
                 }
                 store.addToCart(product?._id);
+                toast.success(`${product?.name} added to cart`);
               }}
             >
               Add to Cart
@@ -54,6 +55,8 @@ const Product = ({ product }) => {
               className="add-to-cart"
               onClick={() => {
                 store.removeFromCart(product?._id);
+                toast.error(`${product?.name} removed from cart`);
+
               }}
             >
               Remove from cart
