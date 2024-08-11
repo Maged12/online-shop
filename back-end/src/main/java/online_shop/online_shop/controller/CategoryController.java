@@ -1,6 +1,7 @@
 package online_shop.online_shop.controller;
 
-import online_shop.online_shop.dto.CategoryDto;
+import online_shop.online_shop.dto.CategoryResponseDto;
+import online_shop.online_shop.dto.request.CategoryRequestDto;
 import online_shop.online_shop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,14 +17,14 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> getAllCategories() {
-        List<CategoryDto> categories = categoryService.getAllCategories();
+    public ResponseEntity<List<CategoryResponseDto>> getAllCategories() {
+        List<CategoryResponseDto> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDto> getCategory(@PathVariable Long id) {
-        CategoryDto categoryDto = categoryService.getCategoryById(id);
+    public ResponseEntity<CategoryResponseDto> getCategory(@PathVariable Long id) {
+        CategoryResponseDto categoryDto = categoryService.getCategoryById(id);
         if (categoryDto == null) {
             return ResponseEntity.notFound().build();
         }
@@ -31,13 +32,14 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<?> createCategory(@RequestBody CategoryRequestDto categoryDto) {
         categoryService.createCategory(categoryDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryDto);
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
+    public ResponseEntity<CategoryResponseDto> updateCategory(@PathVariable Long id,
+            @RequestBody CategoryResponseDto categoryDto) {
         categoryService.updateCategory(id, categoryDto);
         return ResponseEntity.ok(categoryDto);
     }

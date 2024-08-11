@@ -1,63 +1,61 @@
 package online_shop.online_shop.adapter;
 
-import online_shop.online_shop.domain.Category;
-import online_shop.online_shop.dto.CategoryDto;
-import online_shop.online_shop.dto.ProductRequestDto;
-import online_shop.online_shop.dto.ProductResponseDto;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
+import online_shop.online_shop.domain.Category;
+import online_shop.online_shop.domain.Product;
+import online_shop.online_shop.dto.CategoryResponseDto;
+import online_shop.online_shop.dto.request.CategoryRequestDto;
+import online_shop.online_shop.dto.response.CategoryProductResponseDto;
+import online_shop.online_shop.dto.response.ProductCategoryResponseDto;
+
 public class CategoryAdapter {
 
-    public static CategoryDto getCategoryDtoFromCategory(Category category) {
+    public static CategoryResponseDto getCategoryResponseDtoFromCategory(Category category) {
         if (category == null)
             return null;
 
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setName(category.getName());
-        categoryDto.setDescription(category.getDescription());
-        // Avoid setting categoryDto in productDtos to prevent cyclic dependency
-        List<ProductResponseDto> productDtos = category.getProducts().stream()
-                .map(product -> {
-                    ProductResponseDto productDto = ProductAdapter.getProductDtoWithoutCategory(product);
-                    // productDto.setCategoryDto(null); // Avoid cyclic dependency
-                    return productDto;
-                }).collect(Collectors.toList());
+        List<CategoryProductResponseDto> productDtos = category.getProducts().stream()
+                .map(product -> CategoryAdapter.getCategoryProductResponseDtoFromProduct(product)).toList();
+        CategoryResponseDto categoryResponseDto = new CategoryResponseDto(category.getName(), category.getDescription(),
+                productDtos);
 
-        categoryDto.setProductDtos(productDtos);
-        return categoryDto;
+        return categoryResponseDto;
     }
 
-    public static Category getCategoryFromCategoryDto(CategoryDto categoryDto) {
+    public static CategoryProductResponseDto getCategoryProductResponseDtoFromProduct(Product product) {
+        if (product == null)
+            return null;
+
+        return new CategoryProductResponseDto(product.getId(), product.getName(), product.getDescription(),
+                product.getPrice(), product.getImageUrl());
+    }
+
+    public static Category getCategoryFromCategoryRequestDto(CategoryRequestDto categoryDto) {
         if (categoryDto == null)
             return null;
 
         Category category = new Category();
-        category.setName(categoryDto.getName());
-        category.setDescription(categoryDto.getDescription());
+        category.setName(categoryDto.name());
+        category.setDescription(categoryDto.description());
+
         return category;
     }
 
-    public static List<Category> getCategoryListFromCategoryDtoList(List<CategoryDto> categoryDtoList) {
-        return categoryDtoList.stream()
-                .map(CategoryAdapter::getCategoryFromCategoryDto)
-                .collect(Collectors.toList());
-    }
-
-    public static List<CategoryDto> getCategoryDtoListFromCategoryList(List<Category> categoryList) {
+    public static List<CategoryResponseDto> getCategoryDtoListFromCategoryList(List<Category> categoryList) {
         return categoryList.stream()
-                .map(CategoryAdapter::getCategoryDtoFromCategory)
+                .map(CategoryAdapter::getCategoryResponseDtoFromCategory)
                 .collect(Collectors.toList());
     }
 
-    public static CategoryDto getCategoryDtoWithoutProducts(Category category) {
+    public static ProductCategoryResponseDto getProductCategoryResponseDtoFromCategory(Category category) {
         if (category == null)
             return null;
 
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setName(category.getName());
-        categoryDto.setDescription(category.getDescription());
-        return categoryDto;
+        final ProductCategoryResponseDto productCategoryResponseDto = new ProductCategoryResponseDto(category.getName(),
+                category.getDescription());
+
+        return productCategoryResponseDto;
     }
 }

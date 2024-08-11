@@ -2,9 +2,9 @@ package online_shop.online_shop.controller;
 
 import jakarta.validation.Valid;
 import online_shop.online_shop.dto.UserAuthRequest;
-import online_shop.online_shop.dto.UserAuthResponse;
-import online_shop.online_shop.dto.UserRegisterRequest;
 import online_shop.online_shop.dto.UserResponseDto;
+import online_shop.online_shop.dto.request.UserRegisterRequest;
+import online_shop.online_shop.dto.response.UserAuthResponse;
 import online_shop.online_shop.service.UserService;
 import online_shop.online_shop.util.JWTMgmtUtilityService;
 

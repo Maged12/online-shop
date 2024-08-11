@@ -29,10 +29,16 @@ public class Order {
     private String status;
     private double totalAmount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
+
+    @Override
+    public String toString() {
+        return "Order [id=" + id + ", orderDate=" + orderDate + ", status=" + status + ", totalAmount=" + totalAmount
+                + ", user=" + user + ", orderItems=" + orderItems + "]";
+    }
 
 }

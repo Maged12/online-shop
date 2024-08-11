@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import online_shop.online_shop.dto.OrderRequestDto;
-import online_shop.online_shop.dto.OrderResponseDto;
+import online_shop.online_shop.dto.request.OrderRequestDto;
+import online_shop.online_shop.dto.response.OrderResponseDto;
 import online_shop.online_shop.repository.OrderRepository;
 import online_shop.online_shop.repository.UserRepository;
 import online_shop.online_shop.service.OrderService;
@@ -47,12 +47,13 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@RequestBody OrderRequestDto orderDto) {
 
         if (orderDto.userId() == null || orderDto.totalAmount() <= 0 || orderDto.orderItem() == null
-                || orderDto.orderItem().get().isEmpty())
+                || orderDto.orderItem().isEmpty())
             return new ResponseEntity<>(Map.of(
                     "message", "Order status updated successfully"), HttpStatus.BAD_REQUEST);
 
         var order = orderService.createOrder(orderDto);
-        return new ResponseEntity<OrderResponseDto>(order, HttpStatus.CREATED);
+        return new ResponseEntity<>(Map.of("order_id", order.id(), "message", "Order created successfully"),
+                HttpStatus.CREATED);
 
     }
 

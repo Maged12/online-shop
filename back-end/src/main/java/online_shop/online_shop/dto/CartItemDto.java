@@ -2,6 +2,8 @@ package online_shop.online_shop.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import online_shop.online_shop.dto.response.ProductResponseDto;
+
 @JsonIgnoreProperties({ "cartDto" })
 public class CartItemDto {
     private CartDto cartDto;

@@ -37,6 +37,15 @@ public class User implements UserDetails {
     private Role role;
 
     @Override
+    public String toString() {
+        return "User [id=" + id + ", name=" + name + ", email=" + email + ", role=" + role + "]";
+    }
+
+    public User(Long id) {
+        this.id = id;
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String userRoles = getRole().toString();
         Collection<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(userRoles);

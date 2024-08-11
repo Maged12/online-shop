@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import online_shop.online_shop.domain.Category;
 import online_shop.online_shop.domain.Product;
 import online_shop.online_shop.dto.ProductRequestDto;
-import online_shop.online_shop.dto.ProductResponseDto;
+import online_shop.online_shop.dto.response.ProductResponseDto;
 
 public class ProductAdapter {
 
@@ -14,13 +14,10 @@ public class ProductAdapter {
         if (product == null)
             return null;
 
-        ProductResponseDto productDto = new ProductResponseDto();
-        productDto.setName(product.getName());
-        productDto.setDescription(product.getDescription());
-        productDto.setPrice(product.getPrice());
-        productDto.setImage(product.getImage());
-        // Set the categoryDto separately to avoid cyclic dependency
-        productDto.setCategoryDto(CategoryAdapter.getCategoryDtoWithoutProducts(product.getCategory()));
+        ProductResponseDto productDto = new ProductResponseDto(product.getId(), product.getName(),
+                product.getDescription(),
+                product.getPrice(), CategoryAdapter.getProductCategoryResponseDtoFromCategory(product.getCategory()),
+                product.getImageUrl());
 
         return productDto;
     }
@@ -29,26 +26,11 @@ public class ProductAdapter {
         if (product == null)
             return null;
 
-        ProductResponseDto productDto = new ProductResponseDto();
-        productDto.setName(product.getName());
-        productDto.setDescription(product.getDescription());
-        productDto.setPrice(product.getPrice());
-        productDto.setImage(product.getImage());
-        // Do not set categoryDto to avoid cyclic dependency
+        ProductResponseDto productDto = new ProductResponseDto(product.getId(), product.getName(),
+                product.getDescription(),
+                product.getPrice(), null,
+                product.getImageUrl());
         return productDto;
-    }
-
-    public static Product getProductFromProductDto(ProductResponseDto productDto) {
-        if (productDto == null)
-            return null;
-        Product product = new Product();
-        product.setName(productDto.getName());
-        product.setDescription(productDto.getDescription());
-        product.setPrice(productDto.getPrice());
-        product.setCategory(CategoryAdapter.getCategoryFromCategoryDto(productDto.getCategoryDto()));
-        product.setImage(productDto.getImage());
-
-        return product;
     }
 
     public static Product getProductFromProductRequsetDto(ProductRequestDto productDto, String imageUrl) {
@@ -61,15 +43,9 @@ public class ProductAdapter {
         var category = new Category();
         category.setId(Long.parseLong(productDto.categoryId()));
         product.setCategory(category);
-        product.setImage(imageUrl);
+        product.setImageUrl(imageUrl);
 
         return product;
-    }
-
-    public static List<Product> getProductListFromProductDtoList(List<ProductResponseDto> productDtoList) {
-        return productDtoList.stream()
-                .map(ProductAdapter::getProductFromProductDto)
-                .collect(Collectors.toList());
     }
 
     public static List<ProductResponseDto> getProductDtoListFromProductList(List<Product> productList) {

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import online_shop.online_shop.domain.OrderItem;
 import online_shop.online_shop.dto.OrderItemDto;
+import online_shop.online_shop.dto.response.OrderItemResponseDto;
 
 public class OrderItemAdapter {
     public static OrderItemDto getOrderItemDtoFromOrderItem(OrderItem orderItem) {
@@ -23,6 +24,17 @@ public class OrderItemAdapter {
         return orderItemList.stream()
                 .map(OrderItemAdapter::getOrderItemDtoFromOrderItem)
                 .collect(Collectors.toList());
+    }
+
+    public static OrderItemResponseDto getOrderItemResponseDtoFromOrderItem(
+            OrderItem orderItem) {
+        return new OrderItemResponseDto(orderItem.getId(), orderItem.getQuantity(),
+                orderItem.getPrice(), ProductAdapter.getProductDtoFromProduct(orderItem.getProduct()));
+    }
+
+    public static List<OrderItemResponseDto> getOrderItemResponseDtoListFromOrderItemList(
+            List<OrderItem> orderItemList) {
+        return orderItemList.stream().map(OrderItemAdapter::getOrderItemResponseDtoFromOrderItem).toList();
     }
 
 }

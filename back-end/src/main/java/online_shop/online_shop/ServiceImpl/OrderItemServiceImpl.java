@@ -10,6 +10,7 @@ import online_shop.online_shop.adapter.OrderItemAdapter;
 import online_shop.online_shop.domain.Order;
 import online_shop.online_shop.domain.OrderItem;
 import online_shop.online_shop.dto.OrderItemDto;
+import online_shop.online_shop.dto.response.OrderItemResponseDto;
 import online_shop.online_shop.repository.CategoryRepository;
 import online_shop.online_shop.repository.OrderItemRepository;
 import online_shop.online_shop.repository.OrderRepository;
@@ -30,9 +31,9 @@ public class OrderItemServiceImpl implements OrderItemService {
     CategoryRepository categoryRepository;
 
     @Override
-    public List<OrderItemDto> getAllOrderItems(Long orderId) {
+    public List<OrderItemResponseDto> getAllOrderItems(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
-        return OrderItemAdapter.getOrderItemDtoListFromOrderItemList(order.getOrderItems());
+        return OrderItemAdapter.getOrderItemResponseDtoListFromOrderItemList(order.getOrderItems());
     }
 
     @Override

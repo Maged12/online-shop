@@ -1,6 +1,7 @@
 package online_shop.online_shop.controller;
 
 import online_shop.online_shop.dto.OrderItemDto;
+import online_shop.online_shop.dto.response.OrderItemResponseDto;
 import online_shop.online_shop.service.OrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,8 @@ public class OrderItemController {
     private OrderItemService orderItemService;
 
     @GetMapping("/{orderId}/items")
-    public ResponseEntity<List<OrderItemDto>> getAllOrderItems(@PathVariable Long orderId) {
-        List<OrderItemDto> orderItems = orderItemService.getAllOrderItems(orderId);
+    public ResponseEntity<List<OrderItemResponseDto>> getAllOrderItems(@PathVariable Long orderId) {
+        List<OrderItemResponseDto> orderItems = orderItemService.getAllOrderItems(orderId);
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 

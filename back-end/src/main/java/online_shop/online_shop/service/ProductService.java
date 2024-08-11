@@ -1,7 +1,7 @@
 package online_shop.online_shop.service;
 
 import online_shop.online_shop.dto.ProductRequestDto;
-import online_shop.online_shop.dto.ProductResponseDto;
+import online_shop.online_shop.dto.response.ProductResponseDto;
 
 import java.util.List;
 

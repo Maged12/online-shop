@@ -1,4 +1,4 @@
-package online_shop.online_shop.dto;
+package online_shop.online_shop.dto.response;
 
 public class FileUploadResponse {
     private String fileName;

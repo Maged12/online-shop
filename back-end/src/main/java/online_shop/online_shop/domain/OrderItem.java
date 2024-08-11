@@ -1,6 +1,7 @@
 package online_shop.online_shop.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,9 +22,14 @@ public class OrderItem {
     private Long id;
     private int quantity;
     private double price;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
     @ManyToOne
     private Order order;
+
+    @Override
+    public String toString() {
+        return "OrderItem [id=" + id + ", quantity=" + quantity + ", price=" + price + ", product=" + product;
+    }
 
 }

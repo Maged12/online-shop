@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import online_shop.online_shop.adapter.OrderAdapter;
 import online_shop.online_shop.domain.Order;
-import online_shop.online_shop.dto.OrderRequestDto;
-import online_shop.online_shop.dto.OrderResponseDto;
+import online_shop.online_shop.dto.request.OrderRequestDto;
+import online_shop.online_shop.dto.response.OrderResponseDto;
 import online_shop.online_shop.repository.OrderRepository;
 import online_shop.online_shop.service.OrderService;
 
@@ -25,10 +25,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto createOrder(OrderRequestDto orderDto) {
 
-        var order = orderAdapter.toEntity(orderDto, null);
-
-        var savedOrder = orderRepository.save(order);
-
+        var order = orderAdapter.toCreateOrderEntity(orderDto);
+        var savedOrder = orderRepository.saveAndFlush(order);
         return orderAdapter.toResponseDto(savedOrder);
     }
 

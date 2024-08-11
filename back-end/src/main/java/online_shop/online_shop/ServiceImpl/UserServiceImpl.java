@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import online_shop.online_shop.domain.Role;
 import online_shop.online_shop.domain.User;
-import online_shop.online_shop.dto.UserRegisterRequest;
+import online_shop.online_shop.dto.request.UserRegisterRequest;
 import online_shop.online_shop.repository.UserRepository;
 import online_shop.online_shop.service.UserService;
 

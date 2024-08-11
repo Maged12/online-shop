@@ -2,8 +2,8 @@ package online_shop.online_shop.service;
 
 import java.util.List;
 
-import online_shop.online_shop.dto.OrderRequestDto;
-import online_shop.online_shop.dto.OrderResponseDto;
+import online_shop.online_shop.dto.request.OrderRequestDto;
+import online_shop.online_shop.dto.response.OrderResponseDto;
 
 public interface OrderService {
     OrderResponseDto createOrder(OrderRequestDto orderDto);

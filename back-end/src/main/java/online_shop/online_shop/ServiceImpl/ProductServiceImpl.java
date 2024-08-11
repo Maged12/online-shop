@@ -1,24 +1,22 @@
 package online_shop.online_shop.ServiceImpl;
 
-import jakarta.transaction.Transactional;
-
-import online_shop.online_shop.adapter.ProductAdapter;
-import online_shop.online_shop.domain.Category;
-import online_shop.online_shop.domain.Product;
-import online_shop.online_shop.dto.FileUploadResponse;
-import online_shop.online_shop.dto.ProductRequestDto;
-import online_shop.online_shop.dto.ProductResponseDto;
-import online_shop.online_shop.repository.ProductRepository;
-import online_shop.online_shop.service.ProductService;
-import online_shop.online_shop.util.FileStorageService;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import jakarta.transaction.Transactional;
+import online_shop.online_shop.adapter.ProductAdapter;
+import online_shop.online_shop.domain.Category;
+import online_shop.online_shop.domain.Product;
+import online_shop.online_shop.dto.ProductRequestDto;
+import online_shop.online_shop.dto.response.FileUploadResponse;
+import online_shop.online_shop.dto.response.ProductResponseDto;
+import online_shop.online_shop.repository.ProductRepository;
+import online_shop.online_shop.service.ProductService;
+import online_shop.online_shop.util.FileStorageService;
 
 @Service
 @Transactional
@@ -54,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
         if (product != null) {
             final FileUploadResponse response = saveImageUrl(productDto.image());
             if (response != null) {
-                product.setImage(response.getFileDownloadUri());
+                product.setImageUrl(response.getFileDownloadUri());
             }
             product.setName(productDto.name());
             product.setDescription(productDto.description());

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import online_shop.online_shop.domain.Role;
+import online_shop.online_shop.dto.request.OrderRequestDto;
 
 public class UserDto {
     private String name;
