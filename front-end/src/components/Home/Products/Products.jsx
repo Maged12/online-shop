@@ -1,7 +1,7 @@
-import { useGlobalContext } from "../../GlobalContext/GlobalContext";
-import Product from "./Product/Product";
 import { memo } from "react";
 import Skeleton from "react-loading-skeleton";
+import { useGlobalContext } from "../../GlobalContext/GlobalContext";
+import Product from "./Product/Product";
 import "./Products.css"; // Ensure you have the correct path to your CSS file
 
 const Products = () => {

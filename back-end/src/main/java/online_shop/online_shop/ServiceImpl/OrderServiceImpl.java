@@ -26,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDto createOrder(OrderRequestDto orderDto) {
 
         var order = orderAdapter.toCreateOrderEntity(orderDto);
-        var savedOrder = orderRepository.saveAndFlush(order);
+        var savedOrder = orderRepository.save(order);
         return orderAdapter.toResponseDto(savedOrder);
     }
 

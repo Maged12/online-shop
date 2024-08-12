@@ -50,7 +50,7 @@ const DeliveryView = () => {
           {(orders.state.orders.length > 0 &&
             orders.state.orders.map((order) => {
               return (
-                <DeliveryItem key={order._id} order={order}></DeliveryItem>
+                <DeliveryItem key={order.id} order={order}></DeliveryItem>
               );
             })) || <Skeleton height={500}></Skeleton>}
         </div>

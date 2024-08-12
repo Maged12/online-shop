@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import { toast } from "react-toastify";
-import { Action, initialState, Order, Product, State, Category } from "./interfaces";
+import { getUserFromLocalStorage } from "../helpers/checkExpiration";
+import { Action, Category, initialState, Order, Product, State, UserResponse } from "./interfaces";
 
 const ActionTypes = {
   ADD_TO_CART: "ADD_TO_CART",
@@ -131,17 +132,16 @@ const useStore = () => {
 
       const transformedData: Category[] = apiData.map((item: any, index: number) => ({
         ...item,
-        productDtos: item.productDtos.flatMap((product: Product, i: number) =>
-          Array.from({ length: 8 }, (_, j) => ({
+        productDtos: item.productDtos.map((product: Product) => (
+          {
             ...product,
-            id: `${index + 1}-${i + 1}-${j + 1}`,
             rating: 5,
             times_bought: 0,
-            __v: 0,
             product_image: product.imageUrl,
             addedToCart: false,
-          }))
-        ),
+          }
+        )
+        )
       }));
 
       const cart: Product[] = [];
@@ -171,12 +171,29 @@ const useStore = () => {
     };
 
     try {
-      const response = await fetch(`url/place-order`, {
+      const user: UserResponse = getUserFromLocalStorage();
+
+      const order = {
+        totalAmount: payload.cost_after_delivery_rate,
+        userId: payload.user_id,
+        orderItem: payload.items.map(item => ({
+          productId: item.id,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      };
+
+      const response = await fetch(`${baseUrl}/orders`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${user.jwtToken}`
+        },
         mode: "cors",
         credentials: "include",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(
+          order
+        ),
       });
 
       const data = await response.json();

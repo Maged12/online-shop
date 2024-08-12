@@ -1,8 +1,8 @@
-import "./Product.css";
-import placeholder from "../../../../assets/images/img_placeholder.png";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
+import placeholder from "../../../../assets/images/img_placeholder.png";
 import { useGlobalContext } from "../../../GlobalContext/GlobalContext";
+import "./Product.css";
 
 const Product = ({ product }) => {
   let { store, auth, modal } = useGlobalContext();
@@ -35,7 +35,7 @@ const Product = ({ product }) => {
     <div className="product-container">
       <div className="image">
         <img
-          src={product?.product_image || placeholder}
+          src={product?.imageUrl || placeholder}
           alt="Product Image"
           width={"100%"}
         />

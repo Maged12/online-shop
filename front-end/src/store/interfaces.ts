@@ -31,6 +31,18 @@ export interface State {
     order: Product[];
 }
 
+
+export type UserResponse = { user: User, jwtToken: string; };
+
+export type User = {
+    "id": number,
+    "name": string,
+    "email": string,
+    "role": string,
+};
+
+
+
 export interface Action {
     type: string;
     product?: string;

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +37,6 @@ public class OrderController {
         return new ResponseEntity<>(orderDTO, HttpStatus.OK);
     }
 
-    @Transactional
     @GetMapping("/me")
     public ResponseEntity<?> getOrderCurrrentUserOrders() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -61,7 +59,7 @@ public class OrderController {
         if (orderDto.userId() == null || orderDto.totalAmount() <= 0 || orderDto.orderItem() == null
                 || orderDto.orderItem().isEmpty())
             return new ResponseEntity<>(Map.of(
-                    "message", "Order status updated successfully"), HttpStatus.BAD_REQUEST);
+                    "message", "Please provide valid userId, totalAmount and orderItem"), HttpStatus.BAD_REQUEST);
 
         var order = orderService.createOrder(orderDto);
         return new ResponseEntity<>(Map.of("order_id", order.id(), "message", "Order created successfully"),

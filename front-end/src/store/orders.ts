@@ -1,4 +1,6 @@
-import { useReducer, Dispatch } from "react";
+import { useReducer } from "react";
+import { getUserFromLocalStorage } from "../helpers/checkExpiration";
+import { UserResponse } from "./interfaces";
 
 interface State {
   orders: any[];
@@ -33,13 +35,15 @@ const reducer = (state: State, action: Action): State => {
 const useOrders = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const getOrders = async (user_id: string) => {
+  const getOrders = async () => {
+    const user: UserResponse = getUserFromLocalStorage();
     const response = await fetch(
-      `url/get-orders/${user_id}`,
+      `${process.env.REACT_APP_BASE_URL}/orders/me`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${user.jwtToken}`,
         },
         mode: "cors",
         credentials: "include",
@@ -47,11 +51,13 @@ const useOrders = () => {
     );
 
     const data = await response.json();
+    console.log("data orders", data);
+
     if (data.error) {
       return data.error;
     }
-    dispatch({ type: actions.GET_ORDERS, orders: data.orders });
-    return data.orders;
+    dispatch({ type: actions.GET_ORDERS, orders: data });
+    return data;
   };
 
   const setOrderToBeCanceled = (order_id: string) => {
@@ -79,7 +85,7 @@ const useOrders = () => {
     }
 
     dispatch({ type: actions.GET_ORDER_TO_BE_CANCELED, order_id: null });
-    getOrders(data.user_id);
+    getOrders();
 
     return data;
   };
