@@ -1,16 +1,20 @@
 import { FaShoppingCart } from "react-icons/fa";
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Account.css";
 import { useGlobalContext } from "../../GlobalContext/GlobalContext";
 
 const Account = () => {
-  // let { store } = useGlobalContext();
   let { auth, store, modal } = useGlobalContext();
   const cartTotal = store.state.cartQuantity;
+  const navigate = useNavigate();
 
-  const handleShowModal = () => {
-    modal.openModal(false);
+  const handleCartClick = (e) => {
+    if (auth.state.user == null) {
+      e.preventDefault();
+      modal.openModal(false);
+    } else {
+      navigate("/cart");
+    }
   };
 
   const handleLogout = () => {
@@ -20,7 +24,7 @@ const Account = () => {
   return (
     <div className="account">
       <div className="cart">
-        <Link to={"/cart"} className="contains-link-to-accounts">
+        <Link to={"/cart"} className="contains-link-to-accounts" onClick={handleCartClick}>
           {auth.state.user == null ? (
             <span className="account-user">Guest</span>
           ) : (
@@ -29,7 +33,7 @@ const Account = () => {
             </span>
           )}
           <span className="account-details">
-            <FaShoppingCart></FaShoppingCart>
+            <FaShoppingCart />
             <span className="items-in-cart">{cartTotal}</span>
           </span>
         </Link>
@@ -38,7 +42,7 @@ const Account = () => {
         {auth.state.user == null ? (
           <button
             className="btn-rounded small-rounded"
-            onClick={handleShowModal}
+            onClick={() => modal.openModal(false)}
           >
             Login
           </button>
@@ -51,4 +55,5 @@ const Account = () => {
     </div>
   );
 };
+
 export default Account;

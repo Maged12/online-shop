@@ -100,14 +100,6 @@ const useAuth = () => {
   };
 
   const logout = async () => {
-    await fetch(`url/logout`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-      credentials: "include",
-    });
     localStorage.removeItem("user");
     dispatch({ type: actions.LOGOUT });
   };

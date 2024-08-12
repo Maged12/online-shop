@@ -5,12 +5,32 @@ import { toast } from "react-toastify";
 import { useGlobalContext } from "../../../GlobalContext/GlobalContext";
 
 const Product = ({ product }) => {
-  let { store } = useGlobalContext();
+  let { store, auth, modal } = useGlobalContext();
   let stars = [];
   for (let i = 0; i < product?.rating; i++) {
     stars.push(<FaStar key={i} />);
   }
   const isInCart = product?.addedToCart;
+
+  const handleAddToCart = () => {
+    if (!auth.state.user) {
+      // Show modal if user is not authenticated
+      modal.openModal(false);
+      return;
+    }
+    if (store.state.cartQuantity > 10) {
+      toast.warning("You can only add 10 items to cart");
+      return;
+    }
+    store.addToCart(product?.id);
+    toast.success(`${product?.name} added to cart`);
+  };
+
+  const handleRemoveFromCart = () => {
+    store.removeFromCart(product?.id);
+    toast.error(`${product?.name} removed from cart`);
+  };
+
   return (
     <div className="product-container">
       <div className="image">
@@ -36,28 +56,17 @@ const Product = ({ product }) => {
           </div>
         </div>
         <div>
-          {isInCart == false ? (
+          {isInCart === false ? (
             <button
               className="add-to-cart"
-              onClick={() => {
-                if (store.state.cartQuantity > 10) {
-                  toast.warning("You can only add 10 items to cart");
-                  return;
-                }
-                store.addToCart(product?.id);
-                toast.success(`${product?.name} added to cart`);
-              }}
+              onClick={handleAddToCart}
             >
               Add to Cart
             </button>
           ) : (
             <button
               className="add-to-cart"
-              onClick={() => {
-                store.removeFromCart(product?.id);
-                toast.error(`${product?.name} removed from cart`);
-
-              }}
+              onClick={handleRemoveFromCart}
             >
               Remove from cart
             </button>
@@ -68,4 +77,5 @@ const Product = ({ product }) => {
     </div>
   );
 };
+
 export default Product;
