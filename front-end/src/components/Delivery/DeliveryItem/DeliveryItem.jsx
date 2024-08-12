@@ -17,8 +17,8 @@ const DeliveryItem = ({ order }) => {
       return "0";
     }
     return Math.ceil((date.getTime() - currentDate.getTime()) / (1000 * 3600 * 24));
-    
-  }
+
+  };
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };

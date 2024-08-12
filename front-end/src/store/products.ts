@@ -1,132 +1,100 @@
 import { useReducer } from "react";
-
 import { toast } from "react-toastify";
-import { Action, data, initialState, Order, Product, State } from "./interfaces";
+import { Action, initialState, Order, Product, State, Category } from "./interfaces";
 
-
-
-
-
-const actions = Object.freeze({
+const ActionTypes = {
   ADD_TO_CART: "ADD_TO_CART",
   GET_PRODUCTS: "GET_PRODUCTS",
   REMOVE_FROM_CART: "REMOVE_FROM_CART",
   CLEAR_CART: "CLEAR_CART",
   ADD_QUANTITY: "ADD_QUANTITY",
   REDUCE_QUANTITY: "REDUCE_QUANTITY",
-  PREFILL_CART: "PREFILL_CART",
-});
+} as const;
+
+const baseUrl = process.env.REACT_APP_BASE_URL;
+
+const calculateCartTotals = (cart: Product[]) => {
+  const cartTotal = cart.reduce((total, item) => total + item.price * (item.quantity || 1), 0);
+  const cartQuantity = cart.reduce((total, item) => total + (item.quantity || 0), 0);
+  return { cartTotal, cartQuantity };
+};
 
 const reducer = (state: State, action: Action): State => {
   console.log("state", state);
   console.log("action", action);
 
   switch (action.type) {
-    case actions.GET_PRODUCTS:
-      if (action.backed_up_cart?.length === 0) {
-        return { ...state, products: action.products || [] };
-      }
-      const cartTotal = action.backed_up_cart?.reduce(
-        (acc, item) => acc + item.price,
-        0
-      ) || 0;
-      const cartQuantity = action.backed_up_cart?.reduce(
-        (acc, item) => acc + (item.quantity || 0),
-        0
-      ) || 0;
-
-      const updatedProducts = (action.products || []).map((product) => {
-        const cartItem = action.backed_up_cart?.find(
-          (item) => item._id === product._id
-        );
+    case ActionTypes.GET_PRODUCTS:
+      const { cartTotal, cartQuantity } = calculateCartTotals(action.backed_up_cart || []);
+      const products = (action.products || []).map(product => {
+        const cartItem = action.backed_up_cart?.find(item => item.id === product.id);
         return cartItem ? { ...cartItem, addedToCart: true } : product;
       });
 
       return {
         ...state,
-        products: updatedProducts,
+        products,
         cart: action.backed_up_cart || [],
         cartQuantity,
         cartTotal,
       };
 
-    case actions.ADD_TO_CART:
-      const productToAdd = state.products.find(
-        (product) => product._id === action.product
-      );
-      if (productToAdd) {
-        productToAdd.addedToCart = true;
-        productToAdd.quantity = 1;
-        // localforage.setItem("cartItems", [...state.cart, productToAdd]);
+    case ActionTypes.ADD_TO_CART: {
+      const productToAdd = state.products.find(product => product.id === action.product);
+      if (!productToAdd) return state;
 
-        return {
-          ...state,
-          cart: [...state.cart, productToAdd],
-          cartQuantity: state.cartQuantity + 1,
-          cartTotal: state.cartTotal + productToAdd.price,
-        };
-      }
-      return state;
+      productToAdd.addedToCart = true;
+      productToAdd.quantity = 1;
 
-    case actions.REMOVE_FROM_CART:
-      const productToRemove = state.products.find(
-        (product) => product._id === action.product
-      );
-      if (productToRemove) {
-        const newCart = state.cart.filter(
-          (product) => product._id !== action.product
-        );
-        const updatedProduct = { ...productToRemove, addedToCart: false };
-        // localforage.setItem("cartItems", newCart);
+      return {
+        ...state,
+        cart: [...state.cart, productToAdd],
+        cartQuantity: state.cartQuantity + 1,
+        cartTotal: state.cartTotal + productToAdd.price,
+      };
+    }
 
-        const newCartTotal = newCart.reduce(
-          (total, item) => total + item.price * (item.quantity || 1),
-          0
-        );
+    case ActionTypes.REMOVE_FROM_CART: {
+      const productToRemove = state.products.find(product => product.id === action.product);
+      if (!productToRemove) return state;
 
-        return {
-          ...state,
-          products: state.products.map((p) =>
-            p._id === productToRemove._id ? updatedProduct : p
-          ),
-          cart: newCart,
-          cartQuantity: state.cartQuantity - 1,
-          cartTotal: newCartTotal,
-        };
-      }
-      return state;
+      const newCart = state.cart.filter(product => product.id !== action.product);
+      const { cartTotal, cartQuantity } = calculateCartTotals(newCart);
 
-    case actions.ADD_QUANTITY:
-      const productToAddQuantity = state.cart.find(
-        (product) => product._id === action.product
-      );
-      if (productToAddQuantity) {
-        productToAddQuantity.quantity = (productToAddQuantity.quantity || 0) + 1;
+      return {
+        ...state,
+        products: state.products.map(p => p.id === productToRemove.id ? { ...productToRemove, addedToCart: false } : p),
+        cart: newCart,
+        cartQuantity,
+        cartTotal,
+      };
+    }
 
-        return {
-          ...state,
-          cartTotal: parseFloat((state.cartTotal + productToAddQuantity.price).toFixed(2)),
-        };
-      }
-      return state;
+    case ActionTypes.ADD_QUANTITY: {
+      const productToAddQuantity = state.cart.find(product => product.id === action.product);
+      if (!productToAddQuantity) return state;
 
-    case actions.REDUCE_QUANTITY:
-      const productToReduceQuantity = state.cart.find(
-        (product) => product._id === action.product
-      );
-      if (productToReduceQuantity && productToReduceQuantity.quantity && productToReduceQuantity.quantity > 1) {
-        productToReduceQuantity.quantity -= 1;
+      productToAddQuantity.quantity = (productToAddQuantity.quantity || 0) + 1;
 
-        return {
-          ...state,
-          cartTotal: parseFloat((state.cartTotal - productToReduceQuantity.price).toFixed(2)),
-        };
-      }
-      return state;
+      return {
+        ...state,
+        cartTotal: parseFloat((state.cartTotal + productToAddQuantity.price).toFixed(2)),
+      };
+    }
 
-    case actions.CLEAR_CART:
-      // localforage.setItem("cartItems", []);
+    case ActionTypes.REDUCE_QUANTITY: {
+      const productToReduceQuantity = state.cart.find(product => product.id === action.product);
+      if (!productToReduceQuantity || (productToReduceQuantity.quantity || 0) <= 1) return state;
 
+      productToReduceQuantity.quantity! -= 1;
+
+      return {
+        ...state,
+        cartTotal: parseFloat((state.cartTotal - productToReduceQuantity.price).toFixed(2)),
+      };
+    }
+
+    case ActionTypes.CLEAR_CART:
       return {
         ...state,
         cart: [],
@@ -143,69 +111,44 @@ const reducer = (state: State, action: Action): State => {
 const useStore = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const addToCart = (product: string) => {
-    dispatch({ type: actions.ADD_TO_CART, product });
-  };
+  const addToCart = (product: string) => dispatch({ type: ActionTypes.ADD_TO_CART, product });
 
-  const removeFromCart = (product: string) => {
-    dispatch({ type: actions.REMOVE_FROM_CART, product });
-  };
+  const removeFromCart = (product: string) => dispatch({ type: ActionTypes.REMOVE_FROM_CART, product });
 
-  const clearCart = () => {
-    dispatch({ type: actions.CLEAR_CART });
-  };
+  const clearCart = () => dispatch({ type: ActionTypes.CLEAR_CART });
 
-  async function handleData() {
+  const handleData = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/products');
+      const response = await fetch(`${baseUrl}/categories`);
       const apiData = await response.json();
 
-      // Duplicate each product 3 times
-      const transformedData: Product[] = apiData.flatMap((item: any, index: number) => {
-        // Creating an array with 3 identical products for each API item
-        return Array.from({ length: 8 }, (_, i) => ({
-          _id: `${index + 1}-${i + 1}`, // Generate a unique ID for each duplicate
-          name: item.name,
-          description: item.description,
-          rating: 5, // Assuming a default rating of 5
-          price: item.price,
-          times_bought: 0, // Assuming no times bought initially
-          __v: 0, // Assuming no versioning initially
-          product_image: item.image || 'default_image_url.jpg', // Provide a default image if none
-        }));
-      });
-
-      const modifiedData = transformedData.map((product) => ({
-        ...product,
-        addedToCart: false,
+      const transformedData: Product[] = apiData.map((item: any, index: number) => ({
+        ...item,
+        productDtos: item.productDtos.flatMap((product: Product, i: number) =>
+          Array.from({ length: 8 }, (_, j) => ({
+            ...product,
+            _id: `${index + 1}-${i + 1}-${j + 1}`,
+            rating: 5,
+            times_bought: 0,
+            __v: 0,
+            product_image: product.imageUrl,
+            addedToCart: false,
+          }))
+        ),
       }));
 
-      // (await localforage.getItem<Product[]>("cartItems")) ||
       const cart: Product[] = [];
-
-      dispatch({
-        type: actions.GET_PRODUCTS,
-        products: modifiedData,
-        backed_up_cart: cart,
-      });
+      dispatch({ type: ActionTypes.GET_PRODUCTS, products: transformedData, backed_up_cart: cart });
     } catch (err) {
       toast.error("There was a problem processing the products data");
     }
-  }
-
-
-  const getProducts = () => {
-    console.log("get products called");
-    handleData();
   };
 
-  const addQuantity = (product: string) => {
-    dispatch({ type: actions.ADD_QUANTITY, product });
-  };
+  const getProducts = () => handleData();
 
-  const reduceQuantity = (product: string) => {
-    dispatch({ type: actions.REDUCE_QUANTITY, product });
-  };
+  const addQuantity = (product: string) => dispatch({ type: ActionTypes.ADD_QUANTITY, product });
+
+  const reduceQuantity = (product: string) => dispatch({ type: ActionTypes.REDUCE_QUANTITY, product });
 
   const confirmOrder = async (order: Order) => {
     const payload = {
@@ -219,26 +162,29 @@ const useStore = () => {
       contact_number: order.phoneNumber,
       user_id: order.user_id,
     };
-    const response = await fetch(
-      `url/place-order`,
-      {
+
+    try {
+      const response = await fetch(`url/place-order`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         mode: "cors",
         credentials: "include",
         body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      if (data.error) {
+        toast.error("You must be logged in to place an order");
+        return { showRegisterLogin: true };
       }
-    );
-    const data = await response.json();
-    if (data.error) {
-      toast.error("You must be logged in to place an order");
-      return { showRegisterLogin: true };
+
+      toast.success(data.message);
+      clearCart();
+      return true;
+    } catch (error) {
+      toast.error("There was an error confirming the order");
+      return false;
     }
-    toast.success(data.message);
-    clearCart();
-    return true;
   };
 
   return {

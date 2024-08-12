@@ -22,12 +22,12 @@ function HomeView() {
         <section className="products-section">
           <Products></Products>
         </section>
-        <section className="deals">
+        {/* <section className="deals">
           <Deals></Deals>
         </section>
         <section className="top-products">
           <TopProducts></TopProducts>
-        </section>
+        </section> */}
       </main>
     </div>
   );

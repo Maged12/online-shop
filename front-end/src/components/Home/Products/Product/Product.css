@@ -8,6 +8,7 @@
   -ms-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
+  border-radius: 10px 10px 10px 10px;
 }
 
 .product-container:hover {
@@ -15,8 +16,9 @@
 }
 
 .image img {
-  width: 40%;
-  height: 40%;
+  width: 100px;
+  /* Set the fixed width */
+  height: 100px;
   object-fit: contain;
 }
 
