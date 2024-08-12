@@ -20,7 +20,7 @@ function App() {
   let { store } = useGlobalContext();
   let { modal } = useGlobalContext();
   useEffect(() => {
-    if (store.state.products.length > 0) return;
+    if (store.state.categories.length > 0) return;
     store.getProducts();
   }, []);
   return (

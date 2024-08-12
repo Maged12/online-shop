@@ -26,23 +26,22 @@ const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case ActionTypes.GET_PRODUCTS:
       const { cartTotal, cartQuantity } = calculateCartTotals(action.backed_up_cart || []);
-      const products = (action.products || []).map(product => {
-        const cartItem = action.backed_up_cart?.find(item => item.id === product.id);
-        return cartItem ? { ...cartItem, addedToCart: true } : product;
-      });
-
+      const categories = action.categories || [];
       return {
         ...state,
-        products,
+        categories,
         cart: action.backed_up_cart || [],
         cartQuantity,
         cartTotal,
       };
 
     case ActionTypes.ADD_TO_CART: {
-      const productToAdd = state.products.find(product => product.id === action.product);
+      const categoryContainingProduct = state.categories.find(category =>
+        category.productDtos.some(product => product.id === action.product)
+      );
+      if (!categoryContainingProduct) return state;
+      const productToAdd = categoryContainingProduct.productDtos.find(product => product.id === action.product);
       if (!productToAdd) return state;
-
       productToAdd.addedToCart = true;
       productToAdd.quantity = 1;
 
@@ -55,15 +54,23 @@ const reducer = (state: State, action: Action): State => {
     }
 
     case ActionTypes.REMOVE_FROM_CART: {
-      const productToRemove = state.products.find(product => product.id === action.product);
+      const categoryContainingProduct = state.categories.find(category =>
+        category.productDtos.some(product => product.id === action.product)
+      );
+      if (!categoryContainingProduct) return state;
+      const productToRemove = categoryContainingProduct.productDtos.find(product => product.id === action.product);
       if (!productToRemove) return state;
-
+      productToRemove.addedToCart = false;
       const newCart = state.cart.filter(product => product.id !== action.product);
       const { cartTotal, cartQuantity } = calculateCartTotals(newCart);
-
       return {
         ...state,
-        products: state.products.map(p => p.id === productToRemove.id ? { ...productToRemove, addedToCart: false } : p),
+        categories: state.categories.map(category => ({
+          ...category,
+          products: category.productDtos.map(p =>
+            p.id === productToRemove.id ? { ...p, addedToCart: false } : p
+          ),
+        })),
         cart: newCart,
         cartQuantity,
         cartTotal,
@@ -120,14 +127,14 @@ const useStore = () => {
   const handleData = async () => {
     try {
       const response = await fetch(`${baseUrl}/categories`);
-      const apiData = await response.json();
+      const apiData: Category[] = await response.json();
 
-      const transformedData: Product[] = apiData.map((item: any, index: number) => ({
+      const transformedData: Category[] = apiData.map((item: any, index: number) => ({
         ...item,
         productDtos: item.productDtos.flatMap((product: Product, i: number) =>
           Array.from({ length: 8 }, (_, j) => ({
             ...product,
-            _id: `${index + 1}-${i + 1}-${j + 1}`,
+            id: `${index + 1}-${i + 1}-${j + 1}`,
             rating: 5,
             times_bought: 0,
             __v: 0,
@@ -138,7 +145,7 @@ const useStore = () => {
       }));
 
       const cart: Product[] = [];
-      dispatch({ type: ActionTypes.GET_PRODUCTS, products: transformedData, backed_up_cart: cart });
+      dispatch({ type: ActionTypes.GET_PRODUCTS, categories: transformedData, backed_up_cart: cart });
     } catch (err) {
       toast.error("There was a problem processing the products data");
     }

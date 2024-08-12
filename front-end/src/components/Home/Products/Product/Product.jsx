@@ -44,7 +44,7 @@ const Product = ({ product }) => {
                   toast.warning("You can only add 10 items to cart");
                   return;
                 }
-                store.addToCart(product?._id);
+                store.addToCart(product?.id);
                 toast.success(`${product?.name} added to cart`);
               }}
             >
@@ -54,7 +54,7 @@ const Product = ({ product }) => {
             <button
               className="add-to-cart"
               onClick={() => {
-                store.removeFromCart(product?._id);
+                store.removeFromCart(product?.id);
                 toast.error(`${product?.name} removed from cart`);
 
               }}

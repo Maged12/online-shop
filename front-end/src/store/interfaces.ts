@@ -12,7 +12,7 @@ export interface Product {
 export interface Category {
     name: string;
     description: string;
-    products: Product[];
+    productDtos: Product[];
 }
 export interface Order {
     DeliveryType: string;
@@ -24,7 +24,7 @@ export interface Order {
 }
 
 export interface State {
-    products: Product[];
+    categories: Category[];
     cart: Product[];
     cartTotal: number;
     cartQuantity: number;
@@ -34,12 +34,12 @@ export interface State {
 export interface Action {
     type: string;
     product?: string;
-    products?: Product[];
+    categories?: Category[];
     backed_up_cart?: Product[];
 }
 
 export const initialState: State = {
-    products: [],
+    categories: [],
     cart: [],
     cartTotal: 0,
     cartQuantity: 0,

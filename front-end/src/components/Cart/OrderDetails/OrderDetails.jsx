@@ -23,7 +23,7 @@ const OrderDetails = ({ product }) => {
         <div className="increase-quantity">
           <button
             onClick={() => {
-              store.reduceQuantity(product._id);
+              store.reduceQuantity(product.id);
             }}
           >
             -
@@ -31,7 +31,7 @@ const OrderDetails = ({ product }) => {
           <p>{product.quantity}</p>
           <button
             onClick={() => {
-              store.addQuantity(product._id);
+              store.addQuantity(product.id);
             }}
           >
             +
@@ -41,7 +41,7 @@ const OrderDetails = ({ product }) => {
       <div className="remove">
         <button
           onClick={() => {
-            store.removeFromCart(product?._id);
+            store.removeFromCart(product?.id);
           }}
         >
           Remove
