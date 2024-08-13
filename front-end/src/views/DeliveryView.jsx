@@ -13,24 +13,20 @@ const DeliveryView = () => {
   useEffect(() => {
     if (auth.state.user) {
       setLoadingOrders(true);
-      if (orders.state.orders.length <= 0) {
-        orders.getOrders(auth.state.user.id);
-      }
-      if (orders.state.orders.length > 0) {
-        setLoadingOrders(false);
-      }
+      orders.getOrders(auth.state.user.id);
+      setLoadingOrders(false);
     } else {
       modal.openModal(false);
     }
   }, [auth.state.user]);
 
-  const reloadOrders = async () => {
-    setDisabled(true);
-    toast.info("Reloading orders...");
-    await orders.getOrders(auth.state.user.id);
-    setDisabled(false);
-    toast.success("Orders reloaded!");
-  };
+  // const reloadOrders = async () => {
+  //   setDisabled(true);
+  //   toast.info("Reloading orders...");
+  //   await orders.getOrders(auth.state.user.id);
+  //   setDisabled(false);
+  //   toast.success("Orders reloaded!");
+  // };
 
   return (
     <div>
@@ -38,7 +34,7 @@ const DeliveryView = () => {
         <DeliveryEmpty></DeliveryEmpty>
       ) : (
         <div>
-          <div className="reload-orders">
+          {/* <div className="reload-orders">
             <button
               className="btn-rounded"
               onClick={reloadOrders}
@@ -46,13 +42,13 @@ const DeliveryView = () => {
             >
               Reload Orders
             </button>
-          </div>
+          </div> */}
           {(orders.state.orders.length > 0 &&
             orders.state.orders.map((order) => {
               return (
                 <DeliveryItem key={order.id} order={order}></DeliveryItem>
               );
-            })) || <Skeleton height={500}></Skeleton>}
+            })) || <DeliveryEmpty></DeliveryEmpty>}
         </div>
       )}
     </div>

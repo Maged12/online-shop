@@ -13,11 +13,6 @@ const Product = ({ product }) => {
   const isInCart = product?.addedToCart;
 
   const handleAddToCart = () => {
-    if (!auth.state.user) {
-      // Show modal if user is not authenticated
-      modal.openModal(false);
-      return;
-    }
     if (store.state.cartQuantity > 10) {
       toast.warning("You can only add 10 items to cart");
       return;

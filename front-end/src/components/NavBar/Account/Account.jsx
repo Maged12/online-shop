@@ -9,12 +9,7 @@ const Account = () => {
   const navigate = useNavigate();
 
   const handleCartClick = (e) => {
-    if (auth.state.user == null) {
-      e.preventDefault();
-      modal.openModal(false);
-    } else {
-      navigate("/cart");
-    }
+    navigate("/cart");
   };
 
   const handleLogout = () => {
@@ -47,9 +42,12 @@ const Account = () => {
             Login
           </button>
         ) : (
-          <button className="btn-rounded small-rounded" onClick={handleLogout}>
-            Logout
-          </button>
+          <Link to={"/"} onClick={handleLogout}>
+            <button className="btn-rounded small-rounded" >
+              Logout
+            </button>
+          </Link>
+
         )}
       </div>
     </div>

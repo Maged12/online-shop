@@ -11,6 +11,10 @@ const OrderSummary = () => {
     setDeliveryType(type);
   };
   const checkOut = async () => {
+    if (!auth.state.user) {
+      modal.openModal(false);
+      return;
+    }
     let payload = {
       DeliveryType: deliveryType,
       DeliveryTypeCost: deliveryType == "Standard" ? 5 : 10,
@@ -92,7 +96,6 @@ const OrderSummary = () => {
               onClick={() => {
                 if (phone.length > 0) {
                   checkOut();
-                  toast.info("Your order is being processed");
                   return;
                 }
                 toast.error("Please enter your phone number");
