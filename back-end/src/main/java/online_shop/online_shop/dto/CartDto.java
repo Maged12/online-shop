@@ -1,7 +1,5 @@
 package online_shop.online_shop.dto;
 
-import online_shop.online_shop.domain.User;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +8,9 @@ public class CartDto {
     private List<CartItemDto> items = new ArrayList<CartItemDto>();
     private double totalPrice;
 
-    public CartDto() {}
+    public CartDto() {
+    }
+
     public CartDto(UserDto userDto, double totalPrice) {
         this.userDto = userDto;
         this.totalPrice = totalPrice;
@@ -19,6 +19,7 @@ public class CartDto {
     public void addItem(CartItemDto item) {
         items.add(item);
     }
+
     public List<CartItemDto> getItems() {
         return items;
     }

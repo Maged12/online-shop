@@ -1,7 +1,11 @@
 package online_shop.online_shop.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "cartItems")
@@ -19,7 +23,9 @@ public class CartItem {
     private int quantity;
     private double price;
 
-    public CartItem() {}
+    public CartItem() {
+    }
+
     public CartItem(Cart cart, Product product, int quantity, double price) {
         this.cart = cart;
         this.product = product;
