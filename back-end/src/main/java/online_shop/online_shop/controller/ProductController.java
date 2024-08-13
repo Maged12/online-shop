@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.servlet.http.HttpServletRequest;
 import online_shop.online_shop.dto.ProductRequestDto;
+import online_shop.online_shop.dto.response.FileUploadResponse;
 import online_shop.online_shop.dto.response.ProductResponseDto;
 import online_shop.online_shop.service.ProductService;
 import online_shop.online_shop.util.FileStorageService;
@@ -50,17 +53,35 @@ public class ProductController {
         return ResponseEntity.ok(productDto);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<ProductResponseDto> createProduct(@ModelAttribute ProductRequestDto productDto) {
         final ProductResponseDto product = productService.createProduct(productDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductRequestDto> updateProduct(@PathVariable Long id,
+    @PutMapping("update/{id}")
+    public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable Long id,
             @RequestBody ProductRequestDto productDto) {
-        productService.updateProduct(id, productDto);
+        final ProductResponseDto productResponseDto = productService.updateProduct(id, productDto);
+        return ResponseEntity.ok(productResponseDto);
+    }
+
+    @PutMapping("update/{id}/image")
+    public ResponseEntity<ProductResponseDto> updateProductImage(@PathVariable Long id,
+            @RequestParam MultipartFile image) {
+        final ProductResponseDto productDto = productService.updateProductImage(id, image);
         return ResponseEntity.ok(productDto);
+    }
+
+    @PostMapping("/uploadSingleFile")
+    public FileUploadResponse uploadFile(@RequestParam("file") MultipartFile file) {
+        String fileName = fileStorageService.storeFile(file);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/downloadFile/")
+                .path(fileName)
+                .toUriString();
+        return new FileUploadResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
     }
 
     @DeleteMapping("/{id}")

@@ -1,14 +1,21 @@
 package online_shop.online_shop.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import online_shop.online_shop.dto.CategoryResponseDto;
 import online_shop.online_shop.dto.request.CategoryRequestDto;
 import online_shop.online_shop.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -33,15 +40,16 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody CategoryRequestDto categoryDto) {
-        categoryService.createCategory(categoryDto);
-        return ResponseEntity.ok(HttpStatus.CREATED);
+        var category = categoryService.createCategory(categoryDto);
+        return ResponseEntity.ok(category);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponseDto> updateCategory(@PathVariable Long id,
-            @RequestBody CategoryResponseDto categoryDto) {
-        categoryService.updateCategory(id, categoryDto);
-        return ResponseEntity.ok(categoryDto);
+            @RequestBody CategoryRequestDto categoryRequestDto) {
+        var categoryResponseDto = categoryService.updateCategory(id,
+                categoryRequestDto);
+        return ResponseEntity.ok(categoryResponseDto);
     }
 
     @DeleteMapping("/{id}")

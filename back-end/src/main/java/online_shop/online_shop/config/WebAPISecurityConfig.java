@@ -49,8 +49,16 @@ public class WebAPISecurityConfig {
                 .authorizeHttpRequests(
                         auth -> {
                             auth
-
+                                    .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole(Role.ADMIN.toString())
                                     .requestMatchers("/api/auth/admin/register").hasRole(Role.ADMIN.toString())
+                                    .requestMatchers(HttpMethod.POST, "/api/products").hasRole(Role.ADMIN.toString())
+                                    .requestMatchers(HttpMethod.POST, "/api/products/add")
+                                    .hasRole(Role.ADMIN.toString())
+                                    .requestMatchers(HttpMethod.PUT, "/api/products/update/**")
+                                    .hasRole(Role.ADMIN.toString())
+                                    .requestMatchers(HttpMethod.POST, "/api/categories").hasRole(Role.ADMIN.toString())
+                                    .requestMatchers(HttpMethod.PUT, "/api/categories/{id}")
+                                    .hasRole(Role.ADMIN.toString())
                                     .requestMatchers("/api/orders/me").hasRole(Role.CUSTOMER.toString())
                                     .requestMatchers(HttpMethod.POST, "/api/orders").hasRole(Role.CUSTOMER.toString())
                                     .requestMatchers(HttpMethod.GET, "/api/orders").hasRole(Role.ADMIN.toString())

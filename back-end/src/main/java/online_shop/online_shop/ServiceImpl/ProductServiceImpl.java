@@ -47,21 +47,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(Long id, ProductRequestDto productDto) {
-        Product product = productRepository.findById(id).orElse(null);
-        if (product != null) {
+    public ProductResponseDto updateProduct(Long id, ProductRequestDto productDto) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        if (productDto.image() != null) {
             final FileUploadResponse response = saveImageUrl(productDto.image());
             if (response != null) {
                 product.setImageUrl(response.getFileDownloadUri());
             }
-            product.setName(productDto.name());
-            product.setDescription(productDto.description());
-            product.setPrice(productDto.price());
-            var category = new Category();
-            category.setId(Long.parseLong(productDto.categoryId()));
-            product.setCategory(category);
-            productRepository.save(product);
         }
+        product.setName(productDto.name());
+        product.setDescription(productDto.description());
+        product.setPrice(productDto.price());
+        var category = new Category(Long.parseLong(productDto.categoryId()));
+        product.setCategory(category);
+        var updatedProduct = productRepository.saveAndFlush(product);
+        return ProductAdapter.getProductDtoFromProduct(updatedProduct);
     }
 
     @Override
@@ -80,5 +80,14 @@ public class ProductServiceImpl implements ProductService {
                 .toUriString();
         return new FileUploadResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
+    }
+
+    @Override
+    public ProductResponseDto updateProductImage(Long id, MultipartFile image) {
+        final FileUploadResponse response = saveImageUrl(image);
+        var product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setImageUrl(response.getFileDownloadUri());
+        productRepository.save(product);
+        return ProductAdapter.getProductDtoFromProduct(product);
     }
 }

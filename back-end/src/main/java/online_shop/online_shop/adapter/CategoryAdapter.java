@@ -1,5 +1,6 @@
 package online_shop.online_shop.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +17,12 @@ public class CategoryAdapter {
         if (category == null)
             return null;
 
-        List<CategoryProductResponseDto> productDtos = category.getProducts().stream()
-                .map(product -> CategoryAdapter.getCategoryProductResponseDtoFromProduct(product)).toList();
+        List<CategoryProductResponseDto> productDtos = new ArrayList<>();
+
+        if (category.getProducts() != null) {
+            productDtos = category.getProducts().stream()
+                    .map(product -> CategoryAdapter.getCategoryProductResponseDtoFromProduct(product)).toList();
+        }
         CategoryResponseDto categoryResponseDto = new CategoryResponseDto(category.getName(), category.getDescription(),
                 productDtos);
 

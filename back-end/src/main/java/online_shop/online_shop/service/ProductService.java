@@ -5,6 +5,8 @@ import online_shop.online_shop.dto.response.ProductResponseDto;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface ProductService {
     ProductResponseDto createProduct(ProductRequestDto productDto);
 
@@ -12,7 +14,9 @@ public interface ProductService {
 
     List<ProductResponseDto> getAllProducts();
 
-    void updateProduct(Long id, ProductRequestDto productDto);
+    ProductResponseDto updateProduct(Long id, ProductRequestDto productDto);
+
+    ProductResponseDto updateProductImage(Long id, MultipartFile image);
 
     void deleteProduct(Long id);
 }

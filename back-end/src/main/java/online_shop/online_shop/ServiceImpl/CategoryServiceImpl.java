@@ -11,7 +11,6 @@ import online_shop.online_shop.domain.Category;
 import online_shop.online_shop.domain.Product;
 import online_shop.online_shop.dto.CategoryResponseDto;
 import online_shop.online_shop.dto.request.CategoryRequestDto;
-
 import online_shop.online_shop.repository.CategoryRepository;
 import online_shop.online_shop.repository.OrderItemRepository;
 import online_shop.online_shop.repository.ProductRepository;
@@ -30,9 +29,11 @@ public class CategoryServiceImpl implements CategoryService {
     OrderItemRepository orderItemRepository;
 
     @Override
-    public void createCategory(CategoryRequestDto categoryRequestDto) {
-        Category category = CategoryAdapter.getCategoryFromCategoryRequestDto(categoryRequestDto);
-        categoryRepository.save(category);
+    public CategoryResponseDto createCategory(CategoryRequestDto categoryRequestDto) {
+        Category categoryEntity = CategoryAdapter.getCategoryFromCategoryRequestDto(categoryRequestDto);
+        var category = categoryRepository.save(categoryEntity);
+
+        return CategoryAdapter.getCategoryResponseDtoFromCategory(category);
     }
 
     @Override
@@ -47,13 +48,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void updateCategory(Long id, CategoryResponseDto categoryDTO) {
-        Category category = categoryRepository.findById(id).orElse(null);
-        if (category != null) {
-            category.setName(categoryDTO.name());
-            category.setDescription(categoryDTO.description());
-            categoryRepository.save(category);
-        }
+    public CategoryResponseDto updateCategory(Long id, CategoryRequestDto categoryDTO) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        category.setName(categoryDTO.name());
+        category.setDescription(categoryDTO.description());
+        var updatedCategory = categoryRepository.save(category);
+        return CategoryAdapter.getCategoryResponseDtoFromCategory(updatedCategory);
     }
 
     @Override
