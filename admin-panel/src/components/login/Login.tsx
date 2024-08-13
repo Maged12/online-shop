@@ -13,6 +13,7 @@ function LoginBox() {
   const loginCtx = useContext(LoginContext);
   const langCtx = useContext(langContextObj);
   const userNameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const errorMessageRef = useRef<HTMLSpanElement>(null);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -20,26 +21,28 @@ function LoginBox() {
   let isValid = true;
   function loginHandler(e: React.FormEvent) {
     e.preventDefault();
-    isValid = userNameRef.current?.value === "admin";
-    if (userNameRef.current) {
-      if (isValid) {
-        loginCtx.toggleLogin();
-        navigate("/");
-      } else {
+    isValid = userNameRef.current?.value === "admin" && passwordRef.current?.value === "admin";
+    if (isValid) {
+      loginCtx.toggleLogin();
+      navigate("/");
+    } else {
+      if (userNameRef.current) {
         userNameRef.current.focus();
-        errorMessageRef.current?.setAttribute(
-          "style",
-          "display: inline-block;opacity: 1"
-        );
+      } else if (passwordRef.current) {
+        passwordRef.current.focus();
       }
+
+      errorMessageRef.current?.setAttribute(
+        "style",
+        "display: inline-block;opacity: 1"
+      );
     }
   }
 
   return (
     <div
-      className={`${classes.container} ${
-        langCtx.lang === "fa" ? classes.rtl : ""
-      }`}
+      className={`${classes.container} ${langCtx.lang === "fa" ? classes.rtl : ""
+        }`}
     >
       <div className={classes.loginBox}>
         <div className={classes.logo}>
@@ -51,25 +54,18 @@ function LoginBox() {
             ref={userNameRef}
             type={"text"}
             id={"userName"}
-            placeholder={"admin"}
+            placeholder={"username"}
+          />
+          <Input
+            ref={passwordRef}
+            type={"password"}
+            id={"pass"}
+            placeholder={"password"}
           />
           <span ref={errorMessageRef} className={classes.errorMessage}>
             {t("errorMessage")}
           </span>
-          <Input
-            type={"password"}
-            id={"pass"}
-            value={"admin"}
-            readonly={true}
-          />
           <Button type="submit">{t("login")}</Button>
-          <Link className={classes.forgat_pass} to="/">
-            {t("forgetPass")}
-          </Link>
-          <div className={classes.checkbox}>
-            <input type="checkbox" id="rememberMe" />
-            <label htmlFor="rememberMe">{t("rememberMe")}</label>
-          </div>
         </form>
       </div>
 
