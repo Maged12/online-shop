@@ -10,21 +10,25 @@ interface Props {
   placeholder?: string;
   classes?: string;
   value?: string;
-  ref?: HTMLInputElement;
   readonly?: boolean;
   autocomplete?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // Add onChange prop
 }
 
 interface IImperativeHandler {
   focus: () => void;
   value?: string;
 }
+
 const Input = React.forwardRef<IImperativeHandler, Props>((props, ref) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [value, setValue] = useState(props.value || "");
 
-  function inputChangeHandler(e: React.FormEvent<HTMLInputElement>) {
+  function inputChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     setValue(e.currentTarget.value);
+    if (props.onChange) {
+      props.onChange(e); // Call the passed onChange handler
+    }
   }
 
   function inputFocused() {
@@ -38,7 +42,9 @@ const Input = React.forwardRef<IImperativeHandler, Props>((props, ref) => {
       value: value,
     };
   });
+
   const { t } = useTranslation();
+
   return (
     <div className={`${classes.form__control} ${props.classes}`}>
       <label htmlFor={props.id}>{t(`${props.id}`)}</label>
@@ -49,7 +55,7 @@ const Input = React.forwardRef<IImperativeHandler, Props>((props, ref) => {
         maxLength={props.maxLength}
         type={props.type}
         placeholder={props.placeholder}
-        value={value}
+        value={props.value !== undefined ? props.value : value} // Use the controlled value if provided
         readOnly={props.readonly || false}
         onChange={inputChangeHandler}
         autoComplete={props.autocomplete || "off"}

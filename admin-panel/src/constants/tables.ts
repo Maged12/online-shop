@@ -10,7 +10,7 @@ export const customersHeader = [
 ];
 export const customers = [
   {
-    ID: 0,
+    id: 0,
     avatar:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
     userName: "Zahra Mirzaei",
@@ -21,7 +21,7 @@ export const customers = [
     location: "UK",
   },
   {
-    ID: 1,
+    id: 1,
     avatar:
       "https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
     userName: "John Smith",
@@ -32,7 +32,7 @@ export const customers = [
     location: "UK",
   },
   {
-    ID: 2,
+    id: 2,
     avatar:
       "https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=386&q=80",
     userName: "Kyle Simpson",
@@ -43,7 +43,7 @@ export const customers = [
     location: "USA",
   },
   {
-    ID: 3,
+    id: 3,
     avatar:
       "https://images.unsplash.com/photo-1504593811423-6dd665756598?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
     userName: "	Maximilian Doe",
@@ -54,7 +54,7 @@ export const customers = [
     location: "USA",
   },
   {
-    ID: 4,
+    id: 4,
     avatar:
       "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
     userName: "John Smith",
@@ -65,7 +65,7 @@ export const customers = [
     location: "USA",
   },
   {
-    ID: 5,
+    id: 5,
     avatar:
       "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80",
     userName: "John Smith",
@@ -76,7 +76,7 @@ export const customers = [
     location: "USA",
   },
   {
-    ID: 6,
+    id: 6,
     avatar:
       "https://images.unsplash.com/photo-1491349174775-aaafddd81942?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
     userName: "John Smith",
@@ -87,7 +87,7 @@ export const customers = [
     location: "USA",
   },
   {
-    ID: 7,
+    id: 7,
     avatar:
       "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
     userName: "Andrei Neagoie",
@@ -98,7 +98,7 @@ export const customers = [
     location: "USA",
   },
   {
-    ID: 8,
+    id: 8,
     avatar:
       "https://images.unsplash.com/photo-1555952517-2e8e729e0b44?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
     userName: "John Smith",
@@ -109,7 +109,7 @@ export const customers = [
     location: "USA",
   },
   {
-    ID: 9,
+    id: 9,
     avatar:
       "https://images.unsplash.com/photo-1593104547489-5cfb3839a3b5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=853&q=80",
     userName: "John Smith",
@@ -120,7 +120,7 @@ export const customers = [
     location: "USA",
   },
   {
-    ID: 10,
+    id: 10,
     avatar:
       "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=389&q=80",
     userName: "Jason Bourne",
@@ -138,102 +138,4 @@ export const productsHeader = [
   "price",
   "category",
   "actions",
-];
-export const products = [
-  {
-    ID: 0,
-    pic: "https://images.unsplash.com/photo-1628773193539-ad29c647c071?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-    product: "Apple AirPods",
-    inventory: 30,
-    price: "$200.00",
-    category: "digital",
-  },
-  {
-    ID: 1,
-    pic: "https://images.unsplash.com/photo-1484704849700-f032a568e944?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-    product: "NUBWO G06",
-    inventory: 28,
-    price: "$120.00",
-    category: "digital",
-  },
-  {
-    ID: 2,
-    pic: "https://images.unsplash.com/photo-1607860087860-c46e865f6ab0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=426&q=80",
-    product: "Hooded Sweatshirt",
-    inventory: 10,
-    price: "$10.00",
-    category: "clothing",
-  },
-  {
-    ID: 3,
-    pic: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=865&q=80",
-    product: "Keyboard",
-    inventory: 50,
-    price: "$50.00",
-    category: "digital",
-  },
-  {
-    ID: 4,
-    pic: "https://images.unsplash.com/photo-1622470953794-aa9c70b0fb9d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-    product: "T-Shirt",
-    inventory: 20,
-    price: "$75.00",
-    category: "clothing",
-  },
-  {
-    ID: 5,
-    pic: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-    product: "LED Monitor",
-    inventory: 31,
-    price: "$510.00",
-    category: "digital",
-  },
-  {
-    ID: 6,
-    pic: "https://images.unsplash.com/photo-1640025867572-f6b3a8410c81?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
-    product: "Socks",
-    inventory: 5,
-    price: "$10.00",
-    category: "clothing",
-  },
-  {
-    ID: 7,
-    pic: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=465&q=80",
-    product: "Mouse",
-    inventory: 3,
-    price: "$16.00",
-    category: "digital",
-  },
-  {
-    ID: 8,
-    pic: "https://images.unsplash.com/photo-1625753783470-ec2ab4efeeec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=464&q=80",
-    product: "Mielle",
-    inventory: 36,
-    price: "$170.00",
-    category: "beauty",
-  },
-  {
-    ID: 9,
-    pic: "https://images.unsplash.com/photo-1556306535-0f09a537f0a3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-    product: "hat cap",
-    inventory: 17,
-    price: "$25.00",
-    category: "clothing",
-  },
-  {
-    ID: 10,
-    pic: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-    product: "CeraVe",
-    inventory: 7,
-    price: "$220.00",
-    category: "beauty",
-  },
-  {
-    ID: 11,
-    pic: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-    product: "Neutrogena",
-    inventory: 30,
-    price: "$205.00",
-    category: "beauty",
-  },
 ];

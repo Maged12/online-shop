@@ -4,25 +4,22 @@ import useFetch from "../hook/useFetch";
 import { useParams } from "react-router-dom";
 import EditProduct from "../components/edit/editProduct/EditProduct";
 import { IProductsTable } from "../interfaces/Itable";
-import { products } from "../constants/tables";
 import LoadingSpinner from "../components/UI/loadingSpinner/LoadingSpinner";
 
-const url =
-  "https://admin-panel-79c71-default-rtdb.europe-west1.firebasedatabase.app/products";
+const url = (id: string) => `http://localhost:8081/api/products/${id}`;
 function ProductEdit() {
   const { t } = useTranslation();
   const params = useParams();
   let { productId } = params;
 
-  let productInfo: IProductsTable = products.filter(
-    (item) => item.ID.toString() === productId
-  )[0];
+
 
   let productEdit;
 
   const { data, error, status } = useFetch<IProductsTable>(
-    `${url}/${productId}.json`
+    url(productId ?? "1")
   );
+  let productInfo: IProductsTable = data!;
 
   if (status === "loading") {
     productEdit = <LoadingSpinner />;

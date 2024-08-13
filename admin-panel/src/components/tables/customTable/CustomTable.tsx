@@ -14,6 +14,8 @@ const CustomTable: React.FC<Props> = (props) => {
     setShowModal((prev) => !prev);
   }
   function tableBody(item: complex, index: number) {
+    console.log("item", item);
+
     /* type guard (in typescript) */
     if ("username" in item) {
       //for implementing top customers
@@ -41,7 +43,7 @@ const CustomTable: React.FC<Props> = (props) => {
       //for implementing customers table
       return (
         <tr key={index}>
-          <td>{item.ID}</td>
+          <td>{item.id}</td>
           <td className={classes.userName}>
             <img
               className={classes.avatar}
@@ -65,7 +67,7 @@ const CustomTable: React.FC<Props> = (props) => {
                 <Icon icon="fluent:delete-24-regular" width="24" />
               </div>
               <div className={classes.actions__edit}>
-                <Link to={`/customers/${item.ID}`}>
+                <Link to={`/customers/${item.id}`}>
                   <Icon icon="fluent:edit-16-regular" width="24" />
                 </Link>
               </div>
@@ -73,21 +75,22 @@ const CustomTable: React.FC<Props> = (props) => {
           </td>
         </tr>
       );
-    } else if ("category" in item) {
+    } else if ("categoryDto" in item) {
+
       //for implementing products table
       return (
         <tr key={index}>
-          <td>{item.ID}</td>
+          <td>{item.id}</td>
           <td className={classes.product_name}>
             <img
               className={classes.product_img}
-              src={item.pic}
+              src={item.imageUrl}
               alt="user avatar"
             />
-            {item.product}
+            {item.name}
           </td>
           <td>{item.price}</td>
-          <td>{item.category}</td>
+          <td>{item.categoryDto.name}</td>
           <td className={classes.actions}>
             <Icon icon="charm:menu-kebab" />
             <div className={classes.actions__box}>
@@ -98,7 +101,7 @@ const CustomTable: React.FC<Props> = (props) => {
                 <Icon icon="fluent:delete-24-regular" width="24" />
               </div>
               <div className={classes.actions__edit}>
-                <Link to={`/products/${item.ID}`}>
+                <Link to={`/products/${item.id}`}>
                   <Icon icon="fluent:edit-16-regular" width="24" />
                 </Link>
               </div>

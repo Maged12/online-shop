@@ -3,13 +3,13 @@ import { useTranslation } from "react-i18next";
 import useFetch from "../hook/useFetch";
 import CustomTable from "../components/tables/customTable/CustomTable";
 import { IProductsTable } from "../interfaces/Itable";
-import { products, productsHeader } from "../constants/tables";
+import { productsHeader } from "../constants/tables";
 import LoadingSpinner from "../components/UI/loadingSpinner/LoadingSpinner";
 import Button from "../components/UI/button/Button";
 import Dropdown from "../components/UI/dropdown/Dropdown";
 
 const url =
-  "https://admin-panel-79c71-default-rtdb.europe-west1.firebasedatabase.app/products.json";
+  "http://localhost:8081/api/products";
 
 const dropdownOptions = [
   { label: "all", value: "all" },
@@ -21,6 +21,7 @@ function Products() {
   const { t } = useTranslation();
   const [selected, setSelected] = useState(dropdownOptions[0].value);
   const { data, error, status } = useFetch<IProductsTable[]>(url);
+  const products = data;
   let productsTable;
   let tableData: IProductsTable[] | undefined;
 
@@ -37,33 +38,33 @@ function Products() {
     //select data from local file ("../constants/tables.ts")
     switch (selected) {
       case "digital":
-        tableData = products?.filter((item) => item.category === selected);
+        tableData = products?.filter((item) => item.categoryDto.name === selected);
         break;
       case "clothing":
-        tableData = products?.filter((item) => item.category === selected);
+        tableData = products?.filter((item) => item.categoryDto.name === selected);
         break;
       case "beauty":
-        tableData = products?.filter((item) => item.category === selected);
+        tableData = products?.filter((item) => item.categoryDto.name === selected);
         break;
       default:
         tableData = products;
     }
 
     productsTable = (
-      <CustomTable headData={productsHeader} bodyData={tableData} limit={10} />
+      <CustomTable headData={productsHeader} bodyData={tableData!} limit={10} />
     );
   }
 
   if (status === "fetched" && data) {
     switch (selected) {
       case "digital":
-        tableData = data?.filter((item) => item.category === selected);
+        tableData = data?.filter((item) => item.categoryDto.name === selected);
         break;
       case "clothing":
-        tableData = data?.filter((item) => item.category === selected);
+        tableData = data?.filter((item) => item.categoryDto.name === selected);
         break;
       case "beauty":
-        tableData = data?.filter((item) => item.category === selected);
+        tableData = data?.filter((item) => item.categoryDto.name === selected);
         break;
       default:
         tableData = data;
@@ -91,7 +92,7 @@ function Products() {
         <h2 style={{ fontWeight: 700 }}>
           {t("products")}
         </h2>
-        <Button>Add Product</Button>
+        <Button onClick={() => window.location.reload()}>Add Product </Button>
       </div>
       {/* <Dropdown
         dropdownData={dropdownOptions}
@@ -99,6 +100,7 @@ function Products() {
       {productsTable}
     </section >
   );
+  //window.location.reload()
 }
 
 

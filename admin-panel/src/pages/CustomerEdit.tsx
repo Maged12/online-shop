@@ -15,7 +15,7 @@ function CustomerEdit() {
 
   /* fallback in case of time limit to test firebase database will over */
   let customerInfo: IcustomersTable = customers.filter(
-    (item) => item.ID.toString() === customerId
+    (item) => item.id.toString() === customerId
   )[0];
 
   let customerEdit;

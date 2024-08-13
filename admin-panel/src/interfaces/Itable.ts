@@ -13,7 +13,7 @@ export type TlatestTransactions = {
 };
 
 export interface IcustomersTable {
-  ID: number | string;
+  id: number | string;
   userName: string;
   avatar: string;
   email: string;
@@ -24,12 +24,16 @@ export interface IcustomersTable {
 }
 
 export interface IProductsTable {
-  ID: number | string;
-  pic: string;
-  product: string;
-  inventory: number;
+  id: number | string;
+  imageUrl: string;
+  name: string;
   price: string;
-  category: string;
+  categoryDto: CategoryDto;
+}
+
+export interface CategoryDto {
+  description: number | string;
+  name: string;
 }
 
 export type complex =
