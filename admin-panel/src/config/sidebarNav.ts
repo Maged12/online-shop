@@ -13,9 +13,9 @@ const sidebarNav = [
   },
   {
     link: "/customers",
-    section: "customers",
+    section: "Admins",
     icon: "ph:users-bold",
-    text: "Customers",
+    text: "Admin",
   },
   {
     link: "/orders",

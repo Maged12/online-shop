@@ -5,6 +5,7 @@ import CustomTable from "../components/tables/customTable/CustomTable";
 import { IProductsTable } from "../interfaces/Itable";
 import { products, productsHeader } from "../constants/tables";
 import LoadingSpinner from "../components/UI/loadingSpinner/LoadingSpinner";
+import Button from "../components/UI/button/Button";
 import Dropdown from "../components/UI/dropdown/Dropdown";
 
 const url =
@@ -80,14 +81,25 @@ function Products() {
 
   return (
     <section>
-      <h2 className="title">{t("products")}</h2>
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        lineHeight: "1rem",
+        margin: "2rem"
+      }}>
+        <h2 style={{ fontWeight: 700 }}>
+          {t("products")}
+        </h2>
+        <Button>Add Product</Button>
+      </div>
       {/* <Dropdown
         dropdownData={dropdownOptions}
-        onChange={selectedChangeHandler}
-      /> */}
+        onChange={selectedChangeHandler}></Dropdown> */}
       {productsTable}
-    </section>
+    </section >
   );
 }
+
 
 export default Products;

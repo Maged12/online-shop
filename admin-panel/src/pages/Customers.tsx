@@ -5,6 +5,7 @@ import CustomTable from "../components/tables/customTable/CustomTable";
 import { IcustomersTable } from "../interfaces/Itable";
 import { customers, customersHeader } from "../constants/tables";
 import LoadingSpinner from "../components/UI/loadingSpinner/LoadingSpinner";
+import Button from "../components/UI/button/Button";
 const url =
   "https://admin-panel-79c71-default-rtdb.europe-west1.firebasedatabase.app/customers.json";
 function Customers() {
@@ -30,7 +31,18 @@ function Customers() {
 
   return (
     <section>
-      <h2 className="title">{t("customers")}</h2>
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        lineHeight: "1rem",
+        margin: "2rem"
+      }}>
+        <h2 style={{ fontWeight: 700 }}>
+          {t("Admins")}
+        </h2>
+        <Button>Add Admin</Button>
+      </div>
       {customerTable}
     </section>
   );
