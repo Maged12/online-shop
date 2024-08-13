@@ -2,6 +2,7 @@ package online_shop.online_shop.controller;
 
 import java.util.Map;
 
+import online_shop.online_shop.domain.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -64,6 +65,37 @@ public class UserAuthController {
         }
 
     }
+
+
+    @PostMapping(value = { "/admin/login" })
+    public ResponseEntity<?> authenticateAdmin(@Valid @RequestBody UserAuthRequest userAuthRequest)
+            throws Exception {
+        try {
+            var email = userAuthRequest.email();
+            var password = userAuthRequest.password();
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email,
+                            password));
+
+            var jwtToken = jwtMgmtUtilityService.generateToken(email);
+            var user = userService.getUserByEmail(email);
+            if (user != null && user.getRole() == Role.ADMIN) {
+                var userAuthResponse = new UserAuthResponse(jwtToken,
+                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+                return ResponseEntity.ok(userAuthResponse);
+            }
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } catch (AuthenticationException ex) {
+            String errorMessage = "Invalid email or password";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", errorMessage));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+    }
+
 
     @PostMapping(value = { "/register" })
     public ResponseEntity<?> register(@Valid @RequestBody UserRegisterRequest userAuthRequest) {
