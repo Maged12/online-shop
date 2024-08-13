@@ -61,7 +61,7 @@ function LangBox() {
             showBoxHandler();
           }}
         >
-          Arabic (arw)
+          Arabic (ar)
         </div>
       </div>
     </div>
