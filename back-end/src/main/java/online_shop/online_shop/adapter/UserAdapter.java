@@ -19,7 +19,7 @@ public class UserAdapter {
 
     public static UserResponseDto getUserDtoFromUser(User user) {
         UserResponseDto userResponseDto = new UserResponseDto(user.getId(), user.getName(), user.getEmail(),
-                user.getRole());
+                user.getRole(), user.getAddress());
 
         return userResponseDto;
     }

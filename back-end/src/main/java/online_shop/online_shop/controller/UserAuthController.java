@@ -52,7 +52,7 @@ public class UserAuthController {
             var user = userService.getUserByEmail(email);
             if (user != null) {
                 var userAuthResponse = new UserAuthResponse(jwtToken,
-                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.getAddress()));
                 return ResponseEntity.ok(userAuthResponse);
             }
 
@@ -82,7 +82,7 @@ public class UserAuthController {
             var user = userService.getUserByEmail(email);
             if (user != null && user.getRole() == Role.ADMIN) {
                 var userAuthResponse = new UserAuthResponse(jwtToken,
-                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.getAddress()));
                 return ResponseEntity.ok(userAuthResponse);
             }
 
@@ -110,7 +110,7 @@ public class UserAuthController {
 
             if (user != null) {
                 userAuthResponse = new UserAuthResponse(jwtToken,
-                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.getAddress()));
                 return ResponseEntity.ok(userAuthResponse);
             }
 
@@ -133,7 +133,7 @@ public class UserAuthController {
 
             if (user != null) {
                 userAuthResponse = new UserAuthResponse(jwtToken,
-                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+                        new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.getAddress()));
                 return ResponseEntity.ok(userAuthResponse);
             }
 
